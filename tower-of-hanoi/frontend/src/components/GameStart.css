@@ -1,0 +1,144 @@
+.game-start {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.start-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(232, 180, 184, 0.15);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  animation: slideIn 0.6s ease-out;
+}
+
+.start-icon {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.start-title {
+  font-size: 2rem;
+  color: #2C2C2C;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.start-description {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.peg-selection {
+  margin-bottom: 2rem;
+}
+
+.peg-label {
+  display: block;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.peg-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.peg-button {
+  flex: 1;
+  padding: 1.5rem;
+  border: 3px solid #E8B4B8;
+  background: white;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.peg-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(232, 180, 184, 0.3);
+}
+
+.peg-button.active {
+  background: linear-gradient(135deg, #E8B4B8 0%, #C8B6D6 100%);
+  border-color: #C8B6D6;
+  color: white;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(200, 182, 214, 0.4);
+}
+
+.peg-number {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.peg-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.start-button {
+  width: 100%;
+  padding: 1.2rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #E8B4B8 0%, #C8B6D6 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(232, 180, 184, 0.3);
+}
+
+.start-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232, 180, 184, 0.4);
+}
+
+.start-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background: #FFF5F5;
+  border: 2px solid #FCA5A5;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #DC2626;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.error-message span {
+  font-size: 1.2rem;
+}
+
+.error-message p {
+  margin: 0;
+  font-size: 0.95rem;
+}
