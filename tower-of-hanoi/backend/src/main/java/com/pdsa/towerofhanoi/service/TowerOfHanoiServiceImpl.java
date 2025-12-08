@@ -35,18 +35,48 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
         Random random = new Random();
         int numberOfDisks = 5 + random.nextInt(6); // 5 to 10 inclusive
         
+        // ========== DEBUG LOGGING START ==========
+        System.out.println("====================================");
+        System.out.println("=== DEBUG: START NEW GAME ===");
+        System.out.println("Generated numberOfDisks: " + numberOfDisks);
+        System.out.println("Number of pegs: " + request.getNumberOfPegs());
+        System.out.println("====================================");
+        // ========== DEBUG LOGGING END ==========
+        
         log.info("Randomly selected {} disks", numberOfDisks);
         
         // Step 2: Execute appropriate algorithms based on number of pegs
         List<AlgorithmExecutionResult> results;
         if (request.getNumberOfPegs() == 3) {
+            // ========== DEBUG LOGGING ==========
+            System.out.println("Executing 3-peg algorithms for " + numberOfDisks + " disks");
+            // ===================================
             results = executeThreePegAlgorithms(numberOfDisks);
         } else {
+            // ========== DEBUG LOGGING ==========
+            System.out.println("Executing 4-peg algorithms for " + numberOfDisks + " disks");
+            // ===================================
             results = executeFourPegAlgorithms(numberOfDisks);
         }
         
         // Step 3: Get the correct answer (use first algorithm result)
         AlgorithmExecutionResult correctResult = results.get(0);
+        
+        // ========== DEBUG LOGGING START ==========
+        System.out.println("====================================");
+        System.out.println("Algorithm 1 Result:");
+        System.out.println("  Name: " + correctResult.getAlgorithmName());
+        System.out.println("  Minimum Moves: " + correctResult.getMinimumMoves());
+        System.out.println("  Actual Moves Generated: " + correctResult.getMoves().size());
+        System.out.println("  Expected for " + numberOfDisks + " disks (3-peg): " + ((1 << numberOfDisks) - 1));
+        if (results.size() > 1) {
+            System.out.println("Algorithm 2 Result:");
+            System.out.println("  Name: " + results.get(1).getAlgorithmName());
+            System.out.println("  Minimum Moves: " + results.get(1).getMinimumMoves());
+            System.out.println("  Actual Moves Generated: " + results.get(1).getMoves().size());
+        }
+        System.out.println("====================================");
+        // ========== DEBUG LOGGING END ==========
         
         // Step 4: Save game round to database
         GameRound gameRound = new GameRound();
@@ -56,6 +86,15 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
         gameRound.setCorrectMoveSequence(String.join(", ", correctResult.getMoves()));
         
         gameRound = gameRoundRepository.save(gameRound);
+        
+        // ========== DEBUG LOGGING ==========
+        System.out.println("Saved to database:");
+        System.out.println("  GameRound ID: " + gameRound.getId());
+        System.out.println("  Stored numberOfDisks: " + gameRound.getNumberOfDisks());
+        System.out.println("  Stored correctMinimumMoves: " + gameRound.getCorrectMinimumMoves());
+        System.out.println("====================================");
+        // ===================================
+        
         log.info("Saved game round with ID: {}", gameRound.getId());
         
         // Step 5: Save algorithm performance data
@@ -82,19 +121,37 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
     private List<AlgorithmExecutionResult> executeThreePegAlgorithms(int numberOfDisks) {
         List<AlgorithmExecutionResult> results = new ArrayList<>();
         
+        // ========== DEBUG LOGGING ==========
+        System.out.println("executeThreePegAlgorithms called with numberOfDisks: " + numberOfDisks);
+        // ===================================
+        
         // Algorithm 1: Recursive
-        results.add(executeAlgorithm(
+        AlgorithmExecutionResult result1 = executeAlgorithm(
             () -> threePegRecursive.solve(numberOfDisks),
             threePegRecursive.getMinimumMoves(numberOfDisks),
             threePegRecursive.getAlgorithmName()
-        ));
+        );
+        results.add(result1);
+        
+        // ========== DEBUG LOGGING ==========
+        System.out.println("3-Peg Recursive completed:");
+        System.out.println("  getMinimumMoves(" + numberOfDisks + ") returned: " + threePegRecursive.getMinimumMoves(numberOfDisks));
+        System.out.println("  solve(" + numberOfDisks + ") generated: " + result1.getMoves().size() + " moves");
+        // ===================================
         
         // Algorithm 2: Iterative
-        results.add(executeAlgorithm(
+        AlgorithmExecutionResult result2 = executeAlgorithm(
             () -> threePegIterative.solve(numberOfDisks),
             threePegIterative.getMinimumMoves(numberOfDisks),
             threePegIterative.getAlgorithmName()
-        ));
+        );
+        results.add(result2);
+        
+        // ========== DEBUG LOGGING ==========
+        System.out.println("3-Peg Iterative completed:");
+        System.out.println("  getMinimumMoves(" + numberOfDisks + ") returned: " + threePegIterative.getMinimumMoves(numberOfDisks));
+        System.out.println("  solve(" + numberOfDisks + ") generated: " + result2.getMoves().size() + " moves");
+        // ===================================
         
         return results;
     }
@@ -105,19 +162,37 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
     private List<AlgorithmExecutionResult> executeFourPegAlgorithms(int numberOfDisks) {
         List<AlgorithmExecutionResult> results = new ArrayList<>();
         
+        // ========== DEBUG LOGGING ==========
+        System.out.println("executeFourPegAlgorithms called with numberOfDisks: " + numberOfDisks);
+        // ===================================
+        
         // Algorithm 1: Frame-Stewart
-        results.add(executeAlgorithm(
+        AlgorithmExecutionResult result1 = executeAlgorithm(
             () -> fourPegFrameStewart.solve(numberOfDisks),
             fourPegFrameStewart.getMinimumMoves(numberOfDisks),
             fourPegFrameStewart.getAlgorithmName()
-        ));
+        );
+        results.add(result1);
+        
+        // ========== DEBUG LOGGING ==========
+        System.out.println("4-Peg Frame-Stewart completed:");
+        System.out.println("  getMinimumMoves(" + numberOfDisks + ") returned: " + fourPegFrameStewart.getMinimumMoves(numberOfDisks));
+        System.out.println("  solve(" + numberOfDisks + ") generated: " + result1.getMoves().size() + " moves");
+        // ===================================
         
         // Algorithm 2: Optimized
-        results.add(executeAlgorithm(
+        AlgorithmExecutionResult result2 = executeAlgorithm(
             () -> fourPegOptimized.solve(numberOfDisks),
             fourPegOptimized.getMinimumMoves(numberOfDisks),
             fourPegOptimized.getAlgorithmName()
-        ));
+        );
+        results.add(result2);
+        
+        // ========== DEBUG LOGGING ==========
+        System.out.println("4-Peg Optimized completed:");
+        System.out.println("  getMinimumMoves(" + numberOfDisks + ") returned: " + fourPegOptimized.getMinimumMoves(numberOfDisks));
+        System.out.println("  solve(" + numberOfDisks + ") generated: " + result2.getMoves().size() + " moves");
+        // ===================================
         
         return results;
     }
@@ -188,7 +263,17 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
         // Step 1: Get game round
         GameRound gameRound = gameRoundRepository.findById(request.getGameRoundId())
             .orElseThrow(() -> new com.pdsa.towerofhanoi.exception.GameNotFoundException(request.getGameRoundId()));
-            //.orElseThrow(() -> new RuntimeException("Game round not found"));
+        
+        // ========== DEBUG LOGGING ==========
+        System.out.println("====================================");
+        System.out.println("=== SUBMIT ANSWER DEBUG ===");
+        System.out.println("Player: " + request.getPlayerName());
+        System.out.println("Player's moves: " + request.getPlayerMinimumMoves());
+        System.out.println("Correct moves (from DB): " + gameRound.getCorrectMinimumMoves());
+        System.out.println("Number of disks (from DB): " + gameRound.getNumberOfDisks());
+        System.out.println("Number of pegs (from DB): " + gameRound.getNumberOfPegs());
+        System.out.println("====================================");
+        // ===================================
         
         // Step 2: Check if answer is correct
         boolean isCorrect = gameRound.getCorrectMinimumMoves().equals(request.getPlayerMinimumMoves());

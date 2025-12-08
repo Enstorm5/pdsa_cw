@@ -1,7 +1,78 @@
-import { ArrowRight, Layers } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, Layers, Loader } from 'lucide-react';
 import './DiskGeneration.css';
 
-function DiskGeneration({ numberOfDisks, onContinue }) {
+const API_BASE_URL = 'http://localhost:8084/api/tower'; 
+
+function DiskGeneration({ numberOfPegs, onGameDataReady, onContinue }) {
+  const [loading, setLoading] = useState(true);
+  const [numberOfDisks, setNumberOfDisks] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const startGame = async () => {
+      try {
+        setLoading(true);
+        console.log('Starting game with', numberOfPegs, 'pegs');
+        
+        const response = await fetch(`${API_BASE_URL}/start`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            numberOfPegs: numberOfPegs
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to start game');
+        }
+
+        const data = await response.json();
+        console.log('Game started successfully:', data);
+        
+        setNumberOfDisks(data.numberOfDisks);
+        onGameDataReady(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error starting game:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    if (numberOfPegs) {
+      startGame();
+    }
+  }, [numberOfPegs, onGameDataReady]);
+
+  if (loading) {
+    return (
+      <div className="disk-generation">
+        <div className="diskgen-card">
+          <Loader size={80} className="spinner" />
+          <h2 className="diskgen-title">Generating Game Round...</h2>
+          <p className="announcement-text">Randomly selecting disks for this round</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="disk-generation">
+        <div className="diskgen-card">
+          <h2 className="diskgen-title">Error</h2>
+          <p className="announcement-text" style={{ color: 'red' }}>{error}</p>
+          <button className="continue-button" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="disk-generation">
       <div className="diskgen-card">
@@ -18,7 +89,7 @@ function DiskGeneration({ numberOfDisks, onContinue }) {
         </div>
 
         <div className="disk-preview">
-          {[...Array(Math.min(numberOfDisks, 7))].map((_, i) => {
+          {numberOfDisks && [...Array(Math.min(numberOfDisks, 7))].map((_, i) => {
             const diskNum = numberOfDisks - i;
             const width = 40 + (diskNum * 12);
             return (

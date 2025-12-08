@@ -7,11 +7,11 @@ import java.util.List;
 @Component
 public class FourPegFrameStewart {
     
-    private List<String> moves;
-    private char[] pegs = {'A', 'B', 'C', 'D'}; // 4 pegs
+    private final char[] pegs = {'A', 'B', 'C', 'D'}; // ✅ Immutable array (safe)
     
     /**
      * Solves Tower of Hanoi with 4 pegs using Frame-Stewart algorithm
+     * Moves from A to D using B and C as auxiliary
      * Time Complexity: Better than O(2^n), approximately O(2^(sqrt(2n)))
      * Space Complexity: O(n) for recursion stack
      * 
@@ -19,8 +19,8 @@ public class FourPegFrameStewart {
      * @return List of moves in format "A->D"
      */
     public List<String> solve(int n) {
-        moves = new ArrayList<>();
-        frameStewart(n, 0, 3, 1, 2); // Move from A(0) to D(3) using B(1) and C(2)
+        List<String> moves = new ArrayList<>();  // ✅ Local variable (thread-safe)
+        frameStewart(n, 0, 3, 1, 2, moves);  // ✅ Pass as parameter
         return moves;
     }
     
@@ -32,8 +32,9 @@ public class FourPegFrameStewart {
      * @param destination Destination peg index
      * @param aux1 First auxiliary peg index
      * @param aux2 Second auxiliary peg index
+     * @param moves List to store moves
      */
-    private void frameStewart(int n, int source, int destination, int aux1, int aux2) {
+    private void frameStewart(int n, int source, int destination, int aux1, int aux2, List<String> moves) {
         if (n == 0) {
             return;
         }
@@ -49,28 +50,27 @@ public class FourPegFrameStewart {
         if (k >= n) k = n - 1;
         
         // Step 1: Move top k disks from source to aux1 using all 4 pegs
-        frameStewart(k, source, aux1, aux2, destination);
+        frameStewart(k, source, aux1, aux2, destination, moves);
         
         // Step 2: Move remaining (n-k) disks from source to destination using 3 pegs
-        // (Cannot use aux1 as it has k disks)
-        threePegMove(n - k, source, destination, aux2);
+        threePegMove(n - k, source, destination, aux2, moves);
         
         // Step 3: Move k disks from aux1 to destination using all 4 pegs
-        frameStewart(k, aux1, destination, source, aux2);
+        frameStewart(k, aux1, destination, source, aux2, moves);
     }
     
     /**
      * Helper method for 3-peg Tower of Hanoi (used in Frame-Stewart)
      */
-    private void threePegMove(int n, int source, int destination, int auxiliary) {
+    private void threePegMove(int n, int source, int destination, int auxiliary, List<String> moves) {
         if (n == 1) {
             moves.add(pegs[source] + "->" + pegs[destination]);
             return;
         }
         
-        threePegMove(n - 1, source, auxiliary, destination);
+        threePegMove(n - 1, source, auxiliary, destination, moves);
         moves.add(pegs[source] + "->" + pegs[destination]);
-        threePegMove(n - 1, auxiliary, destination, source);
+        threePegMove(n - 1, auxiliary, destination, source, moves);
     }
     
     /**
@@ -95,8 +95,8 @@ public class FourPegFrameStewart {
             // Try all possible split points
             for (int k = 1; k < i; k++) {
                 // Cost: move k disks twice (to aux and to dest) + move (i-k) disks once with 3 pegs
-                int moves = 2 * dp[k] + ((1 << (i - k)) - 1); // (1 << (i-k)) - 1 is 2^(i-k) - 1
-                dp[i] = Math.min(dp[i], moves);
+                int movesCount = 2 * dp[k] + ((1 << (i - k)) - 1);
+                dp[i] = Math.min(dp[i], movesCount);
             }
         }
         

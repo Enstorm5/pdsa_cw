@@ -75,8 +75,8 @@ class ThreePegIterativeTest {
         List<String> moves = algorithm.solve(3);
         
         for (String move : moves) {
-            assertTrue(move.matches("[A-D]->[A-D]"), 
-                "Move should be in format 'X->Y'");
+            assertTrue(move.matches("[ABC]->[ABC]"), 
+                "Move should be in format 'X->Y' where X and Y are A, B, or C");
         }
     }
     

@@ -24,7 +24,7 @@ class ThreePegRecursiveTest {
         List<String> moves = algorithm.solve(1);
         
         assertEquals(1, moves.size(), "Should have exactly 1 move");
-        assertEquals("A->D", moves.get(0), "Move should be from A to D");
+        assertEquals("A->C", moves.get(0), "Move should be from A to C");
     }
     
     @Test
@@ -81,19 +81,19 @@ class ThreePegRecursiveTest {
         List<String> moves = algorithm.solve(3);
         
         for (String move : moves) {
-            assertTrue(move.matches("[A-D]->[A-D]"), 
-                "Move should be in format 'X->Y' where X and Y are A, B, C, or D");
+            assertTrue(move.matches("[ABC]->[ABC]"), 
+                "Move should be in format 'X->Y' where X and Y are A, B, or C");
         }
     }
     
     @Test
     @DisplayName("Test first and last moves for 3 disks")
     void testFirstAndLastMoves() {
-    List<String> moves = algorithm.solve(3);
-    
-    // For 3 disks moving from A to D using B as auxiliary:
-    // The sequence is: A->D, A->B, D->B, A->D, B->A, B->D, A->D
-    assertEquals("A->D", moves.get(0), "First move should be A->D");
-    assertEquals("A->D", moves.get(moves.size() - 1), "Last move should be A->D");
+        List<String> moves = algorithm.solve(3);
+        
+        // For 3 disks moving from A to C using B as auxiliary:
+        // The sequence is: A->C, A->B, C->B, A->C, B->A, B->C, A->C
+        assertEquals("A->C", moves.get(0), "First move should be A->C");
+        assertEquals("A->C", moves.get(moves.size() - 1), "Last move should be A->C");
     }
 }

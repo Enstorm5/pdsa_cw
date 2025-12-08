@@ -7,10 +7,9 @@ import java.util.List;
 @Component
 public class ThreePegRecursive {
     
-    private List<String> moves;
-    
     /**
-     * Solves Tower of Hanoi using recursive approach
+     * Solves Tower of Hanoi using recursive approach (3 pegs)
+     * Moves from A to C using B as auxiliary
      * Time Complexity: O(2^n)
      * Space Complexity: O(n) for recursion stack
      * 
@@ -18,8 +17,8 @@ public class ThreePegRecursive {
      * @return List of moves in format "A->C"
      */
     public List<String> solve(int n) {
-        moves = new ArrayList<>();
-        solveRecursive(n, 'A', 'D', 'B');
+        List<String> moves = new ArrayList<>();  // ✅ Local variable (thread-safe)
+        solveRecursive(n, 'A', 'C', 'B', moves);  // ✅ Pass as parameter
         return moves;
     }
     
@@ -30,8 +29,9 @@ public class ThreePegRecursive {
      * @param source Source peg
      * @param destination Destination peg
      * @param auxiliary Auxiliary peg
+     * @param moves List to store moves
      */
-    private void solveRecursive(int n, char source, char destination, char auxiliary) {
+    private void solveRecursive(int n, char source, char destination, char auxiliary, List<String> moves) {
         if (n == 1) {
             // Base case: move single disk
             moves.add(source + "->" + destination);
@@ -39,13 +39,13 @@ public class ThreePegRecursive {
         }
         
         // Step 1: Move n-1 disks from source to auxiliary using destination
-        solveRecursive(n - 1, source, auxiliary, destination);
+        solveRecursive(n - 1, source, auxiliary, destination, moves);
         
         // Step 2: Move the largest disk from source to destination
         moves.add(source + "->" + destination);
         
         // Step 3: Move n-1 disks from auxiliary to destination using source
-        solveRecursive(n - 1, auxiliary, destination, source);
+        solveRecursive(n - 1, auxiliary, destination, source, moves);
     }
     
     /**

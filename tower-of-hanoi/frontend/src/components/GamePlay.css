@@ -353,3 +353,76 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Algorithm Results Panel - Optional Reference */
+.gameplay-content {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.game-area {
+  flex: 1;
+}
+
+.algorithm-results-panel {
+  width: 300px;
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 1.5rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.algorithm-results-panel h3 {
+  font-size: 1.2rem;
+  color: #8B7355;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.algo-result {
+  background: white;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.algo-result h4 {
+  font-size: 0.9rem;
+  color: #D4AF37;
+  margin-bottom: 0.5rem;
+}
+
+.algo-result p {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.algo-result details {
+  margin-top: 0.5rem;
+}
+
+.algo-result summary {
+  font-size: 0.8rem;
+  color: #9333ea;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.algo-result summary:hover {
+  text-decoration: underline;
+}
+
+.move-sequence {
+  font-size: 0.75rem;
+  color: #888;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: #f9f9f9;
+  border-radius: 5px;
+  margin-top: 0.5rem;
+}

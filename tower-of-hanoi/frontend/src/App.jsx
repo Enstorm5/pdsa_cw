@@ -8,7 +8,7 @@ import GameResult from './components/GameResult';
 import './App.css';
 
 function App() {
-  const [gameState, setGameState] = useState('welcome'); // welcome, diskGen, pegSelect, instructions, playing, result
+  const [gameState, setGameState] = useState('welcome'); // welcome, pegSelect, diskGen, instructions, playing, result
   const [playerName, setPlayerName] = useState('');
   const [numberOfDisks, setNumberOfDisks] = useState(null);
   const [numberOfPegs, setNumberOfPegs] = useState(null);
@@ -17,18 +17,15 @@ function App() {
 
   const handleWelcomeComplete = (name) => {
     setPlayerName(name);
-    // System randomly generates disk count
-    const randomDisks = Math.floor(Math.random() * 6) + 5; // 5-10
-    setNumberOfDisks(randomDisks);
-    setGameState('diskGen');
-  };
-
-  const handleDiskGenComplete = () => {
-    setGameState('pegSelect');
+    setGameState('pegSelect'); // ✅ Go directly to peg selection
   };
 
   const handlePegSelection = (pegs) => {
     setNumberOfPegs(pegs);
+    setGameState('diskGen'); // ✅ Show disk generation screen while loading
+  };
+
+  const handleDiskGenComplete = () => {
     setGameState('instructions');
   };
 
@@ -37,7 +34,11 @@ function App() {
   };
 
   const handleGameDataReady = (data) => {
+    // ✅ Backend provides the number of disks
+    setNumberOfDisks(data.numberOfDisks);
     setGameData(data);
+    // Auto-advance to instructions once data is loaded
+    setGameState('instructions');
   };
 
   const handleGameSubmit = (result) => {
@@ -76,14 +77,16 @@ function App() {
         {gameState === 'welcome' && (
           <WelcomeScreen onStart={handleWelcomeComplete} />
         )}
+        {gameState === 'pegSelect' && (
+          <PegSelection onSelect={handlePegSelection} onBack={handleBackToMenu} />
+        )}
         {gameState === 'diskGen' && (
           <DiskGeneration
             numberOfDisks={numberOfDisks}
+            numberOfPegs={numberOfPegs}
+            onGameDataReady={handleGameDataReady}
             onContinue={handleDiskGenComplete}
           />
-        )}
-        {gameState === 'pegSelect' && (
-          <PegSelection onSelect={handlePegSelection} onBack={handleBackToMenu} />
         )}
         {gameState === 'instructions' && (
           <GameInstructions
@@ -97,7 +100,7 @@ function App() {
             playerName={playerName}
             numberOfDisks={numberOfDisks}
             numberOfPegs={numberOfPegs}
-            onGameDataReady={handleGameDataReady}
+            gameData={gameData}
             onSubmit={handleGameSubmit}
             onBack={handleBackToMenu}
           />

@@ -9,22 +9,23 @@ import java.util.Stack;
 public class ThreePegIterative {
     
     /**
-     * Solves Tower of Hanoi using iterative approach
+     * Solves Tower of Hanoi using iterative approach (3 pegs)
+     * Moves from A to C using B as auxiliary
      * Time Complexity: O(2^n)
-     * Space Complexity: O(1)
+     * Space Complexity: O(n)
      * 
      * @param n Number of disks
      * @return List of moves in format "A->C"
      */
     public List<String> solve(int n) {
-        List<String> moves = new ArrayList<>();
+        List<String> moves = new ArrayList<>();  // ✅ Already thread-safe
         
         // Calculate total number of moves
         int totalMoves = (int) Math.pow(2, n) - 1;
         
-        // Peg naming
+        // Peg naming (3 pegs only: A, B, C)
         char source = 'A';
-        char destination = 'D';
+        char destination = 'C';
         char auxiliary = 'B';
         
         // If number of disks is even, swap destination and auxiliary
@@ -34,10 +35,10 @@ public class ThreePegIterative {
             auxiliary = temp;
         }
         
-        // Create stacks for each peg
+        // Create stacks for each peg (3 pegs only)
         Stack<Integer> pegA = new Stack<>();
         Stack<Integer> pegB = new Stack<>();
-        Stack<Integer> pegD = new Stack<>();
+        Stack<Integer> pegC = new Stack<>();
         
         // Initialize source peg with all disks
         for (int i = n; i >= 1; i--) {
@@ -48,13 +49,13 @@ public class ThreePegIterative {
         for (int i = 1; i <= totalMoves; i++) {
             if (i % 3 == 1) {
                 // Move between source and destination
-                moveDisk(pegA, pegD, source, destination, moves);
+                moveDisk(pegA, pegC, source, destination, moves);
             } else if (i % 3 == 2) {
                 // Move between source and auxiliary
                 moveDisk(pegA, pegB, source, auxiliary, moves);
             } else {
                 // Move between auxiliary and destination
-                moveDisk(pegB, pegD, auxiliary, destination, moves);
+                moveDisk(pegB, pegC, auxiliary, destination, moves);
             }
         }
         
