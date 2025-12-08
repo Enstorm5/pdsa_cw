@@ -165,3 +165,59 @@
     transform: scale(1.05);
   }
 }
+
+/* Responsive Design - Add to end of file */
+@media (max-width: 768px) {
+  .diskgen-card {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+  }
+  
+  .diskgen-title {
+    font-size: 1.6rem;
+  }
+  
+  .disk-count-badge {
+    width: 80px;
+    height: 80px;
+    font-size: 3rem;
+  }
+  
+  .announcement-text {
+    font-size: 1.1rem;
+  }
+  
+  .disk-preview {
+    padding: 1.5rem;
+  }
+  
+  .preview-disk {
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .diskgen-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .diskgen-title {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .disk-announcement {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .disk-count-badge {
+    width: 70px;
+    height: 70px;
+    font-size: 2.5rem;
+  }
+  
+  .announcement-text {
+    font-size: 1rem;
+  }
+}

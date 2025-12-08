@@ -5,6 +5,7 @@ import { Send, Loader, ArrowLeft, RotateCcw, Clock } from 'lucide-react';
 import './GamePlay.css';
 
 function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit, onBack }) {
+  const [showReferenceSolutions, setShowReferenceSolutions] = useState(false);
   const [mode, setMode] = useState('drag'); // 'drag' or 'manual'
   const [pegs, setPegs] = useState([]);
   const [moveCount, setMoveCount] = useState(0);
@@ -18,8 +19,10 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
   // Manual entry state
   const [manualMoves, setManualMoves] = useState('');
   const [manualSequence, setManualSequence] = useState('');
+  const [manualPegs, setManualPegs] = useState([]); // For manual mode visualization
+  const [animatingManual, setAnimatingManual] = useState(false);
 
-  // Initialize game - removed API call since we already have gameData
+  // Initialize game
   useEffect(() => {
     initializeGame();
   }, [numberOfDisks, numberOfPegs]);
@@ -40,6 +43,7 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
       initialPegs[0].push(i);
     }
     setPegs(initialPegs);
+    setManualPegs(initialPegs.map(p => [...p])); // Copy for manual mode
   };
 
   const formatTime = (seconds) => {
@@ -125,6 +129,38 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
     }
   };
 
+  // Animate manual entry moves
+  const animateManualMoves = async (movesArray) => {
+    setAnimatingManual(true);
+    const pegLabels = ['A', 'B', 'C', 'D'];
+    let currentPegs = Array(numberOfPegs).fill(null).map(() => []);
+    
+    // Initialize with all disks on first peg
+    for (let i = numberOfDisks; i >= 1; i--) {
+      currentPegs[0].push(i);
+    }
+    setManualPegs(currentPegs.map(p => [...p]));
+    
+    // Animate each move
+    for (let move of movesArray) {
+      await new Promise(resolve => setTimeout(resolve, 500)); // Delay between moves
+      
+      const [from, to] = move.split('->');
+      const fromIndex = pegLabels.indexOf(from);
+      const toIndex = pegLabels.indexOf(to);
+      
+      if (fromIndex !== -1 && toIndex !== -1 && currentPegs[fromIndex].length > 0) {
+        const disk = currentPegs[fromIndex].pop();
+        currentPegs[toIndex].push(disk);
+        setManualPegs(currentPegs.map(p => [...p]));
+      }
+    }
+    
+    setAnimatingManual(false);
+    // Wait a bit then submit
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  };
+
   const handleManualSubmit = async (e) => {
     e.preventDefault();
     clearInterval(timerInterval);
@@ -132,6 +168,11 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
     setError('');
 
     try {
+      // Parse and animate moves
+      const movesArray = manualSequence.split(',').map(m => m.trim());
+      await animateManualMoves(movesArray);
+      
+      // Submit answer
       const response = await axios.post(`${API_BASE_URL}/submit-answer`, {
         gameRoundId: gameData.gameRoundId,
         playerName: playerName,
@@ -142,6 +183,7 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to submit answer.');
       setSubmitLoading(false);
+      setAnimatingManual(false);
     }
   };
 
@@ -151,6 +193,7 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
       initialPegs[0].push(i);
     }
     setPegs(initialPegs);
+    setManualPegs(initialPegs.map(p => [...p]));
     setMoveCount(0);
     setMoveHistory([]);
     setError('');
@@ -177,32 +220,43 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
     return ['A', 'B', 'C', 'D'][index];
   };
 
-  // Show algorithm results panel (optional - for debugging/reference)
+  // Show algorithm results panel (collapsible)
   const renderAlgorithmResults = () => {
     if (!gameData) return null;
 
     return (
-      <div className="algorithm-results-panel">
-        <h3>Reference Solutions</h3>
-        {gameData.algorithm1Result && (
-          <div className="algo-result">
-            <h4>{gameData.algorithm1Result.algorithmName}</h4>
-            <p>Minimum Moves: {gameData.algorithm1Result.minimumMoves}</p>
-            <details>
-              <summary>Show Sequence</summary>
-              <p className="move-sequence">{gameData.algorithm1Result.moveSequence}</p>
-            </details>
-          </div>
-        )}
-        {gameData.algorithm2Result && (
-          <div className="algo-result">
-            <h4>{gameData.algorithm2Result.algorithmName}</h4>
-            <p>Minimum Moves: {gameData.algorithm2Result.minimumMoves}</p>
-            <details>
-              <summary>Show Sequence</summary>
-              <p className="move-sequence">{gameData.algorithm2Result.moveSequence}</p>
-            </details>
-          </div>
+      <div className={`algorithm-results-panel ${showReferenceSolutions ? 'visible' : 'hidden'}`}>
+        <button 
+          className="toggle-solutions-btn"
+          onClick={() => setShowReferenceSolutions(!showReferenceSolutions)}
+        >
+          {showReferenceSolutions ? '❌ Hide' : '💡 Solutions'}
+        </button>
+      
+        {showReferenceSolutions && (
+          <>
+            <h3>Reference Solutions</h3>
+            {gameData.algorithm1Result && (
+              <div className="algo-result">
+                <h4>{gameData.algorithm1Result.algorithmName}</h4>
+                <p>Minimum Moves: {gameData.algorithm1Result.minimumMoves}</p>
+                <details>
+                  <summary>Show Sequence</summary>
+                  <p className="move-sequence">{gameData.algorithm1Result.moveSequence}</p>
+                </details>
+              </div>
+            )}
+            {gameData.algorithm2Result && (
+              <div className="algo-result">
+                <h4>{gameData.algorithm2Result.algorithmName}</h4>
+                <p>Minimum Moves: {gameData.algorithm2Result.minimumMoves}</p>
+                <details>
+                  <summary>Show Sequence</summary>
+                  <p className="move-sequence">{gameData.algorithm2Result.moveSequence}</p>
+                </details>
+              </div>
+            )}
+          </>
         )}
       </div>
     );
@@ -266,27 +320,34 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
                     onDragOver={handleDragOver}
                     onDrop={() => handleDrop(pegIndex)}
                   >
+                    {/* Destination indicator */}
+                    {pegIndex === numberOfPegs - 1 && (
+                      <div className="destination-badge">
+                        🎯 Destination
+                      </div>
+                    )}
+                    
                     <div className="peg-structure">
                       <div className="peg-rod"></div>
+                      <div className="disk-stack">
+                        {peg.map((disk, diskIndex) => (
+                          <div
+                            key={`${pegIndex}-${disk}-${diskIndex}`}
+                            className="disk-item"
+                            draggable={diskIndex === peg.length - 1}
+                            onDragStart={() => handleDragStart(pegIndex, diskIndex)}
+                            style={{
+                              width: `${50 + disk * 20}px`,
+                              backgroundColor: getDiskColor(disk),
+                              cursor: diskIndex === peg.length - 1 ? 'grab' : 'not-allowed',
+                              opacity: diskIndex === peg.length - 1 ? 1 : 0.7
+                            }}
+                          >
+                            {disk}
+                          </div>
+                        ))}
+                      </div>
                       <div className="peg-base">{getPegLabel(pegIndex)}</div>
-                    </div>
-                    <div className="disk-stack">
-                      {peg.map((disk, diskIndex) => (
-                        <div
-                          key={`${pegIndex}-${disk}-${diskIndex}`}
-                          className="disk-item"
-                          draggable={diskIndex === peg.length - 1}
-                          onDragStart={() => handleDragStart(pegIndex, diskIndex)}
-                          style={{
-                            width: `${50 + disk * 20}px`,
-                            backgroundColor: getDiskColor(disk),
-                            cursor: diskIndex === peg.length - 1 ? 'grab' : 'not-allowed',
-                            opacity: diskIndex === peg.length - 1 ? 1 : 0.7
-                          }}
-                        >
-                          {disk}
-                        </div>
-                      ))}
                     </div>
                   </div>
                 ))}
@@ -301,6 +362,36 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
             </div>
           ) : (
             <div className="manual-mode">
+              {/* Visual representation for manual mode */}
+              <div className="manual-pegs-visual">
+                <h3>Tower Preview</h3>
+                <div className="pegs-container-small">
+                  {manualPegs.map((peg, pegIndex) => (
+                    <div key={pegIndex} className="peg-column-small">
+                      <div className="peg-structure-small">
+                        <div className="peg-rod-small"></div>
+                        <div className="disk-stack-small">
+                          {peg.map((disk, diskIndex) => (
+                            <div
+                              key={`${pegIndex}-${disk}-${diskIndex}`}
+                              className="disk-item-small"
+                              style={{
+                                width: `${30 + disk * 12}px`,
+                                backgroundColor: getDiskColor(disk),
+                                animation: animatingManual ? 'diskMove 0.5s ease' : 'none'
+                              }}
+                            >
+                              {disk}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="peg-base-small">{getPegLabel(pegIndex)}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <form onSubmit={handleManualSubmit} className="manual-form">
                 <div className="form-group">
                   <label>Number of Moves</label>
@@ -308,9 +399,10 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
                     type="number"
                     value={manualMoves}
                     onChange={(e) => setManualMoves(e.target.value)}
-                    placeholder="e.g., 127"
+                    placeholder="e.g., 31"
                     required
                     min="1"
+                    disabled={animatingManual}
                   />
                 </div>
 
@@ -322,15 +414,20 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
                     placeholder="e.g., A->C, A->B, C->B, ..."
                     required
                     rows="4"
+                    disabled={animatingManual}
                   />
                   <small>Format: A→C, A→B, C→B (comma-separated)</small>
                 </div>
 
-                <button type="submit" className="submit-button" disabled={submitLoading}>
-                  {submitLoading ? (
+                <button 
+                  type="submit" 
+                  className="submit-button" 
+                  disabled={submitLoading || animatingManual}
+                >
+                  {submitLoading || animatingManual ? (
                     <>
                       <Loader className="spinner" />
-                      Submitting...
+                      {animatingManual ? 'Animating...' : 'Submitting...'}
                     </>
                   ) : (
                     <>
@@ -344,7 +441,7 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
           )}
         </div>
 
-        {/* Algorithm Results Panel - Optional */}
+        {/* Algorithm Results Panel */}
         {renderAlgorithmResults()}
       </div>
     </div>

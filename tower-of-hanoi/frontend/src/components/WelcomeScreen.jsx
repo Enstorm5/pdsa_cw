@@ -1,82 +1,86 @@
 import { useState } from 'react';
-import { Play, ArrowLeft } from 'lucide-react';
+import { ArrowRight, Info } from 'lucide-react';
 import './WelcomeScreen.css';
 
 function WelcomeScreen({ onStart }) {
-  const [playerName, setPlayerName] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
 
-  const handleStart = () => {
-    if (playerName.trim().length < 2) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (name.trim().length < 2) {
       setError('Please enter a valid name (at least 2 characters)');
       return;
     }
-    onStart(playerName.trim());
-  };
-
-  const handleBackToMenu = () => {
-    // This will be connected to your main menu router
-    alert('This will navigate back to the main game menu');
+    onStart(name.trim());
   };
 
   return (
     <div className="welcome-screen">
       <div className="welcome-card">
-        <div className="welcome-icon">🗼</div>
-        
-        <h2 className="welcome-title">Welcome to Tower of Hanoi!</h2>
-        
-        <div className="welcome-intro">
-          <div className="intro-section">
-            <h3>📖 About the Game</h3>
-            <p>
-              Tower of Hanoi is a classic mathematical puzzle invented by French 
-              mathematician Édouard Lucas in 1883. Your mission is to move a tower 
-              of disks from one peg to another following specific rules.
-            </p>
-          </div>
-
-          <div className="intro-section">
-            <h3>🎯 Quick Rules Summary</h3>
-            <ul>
-              <li>Move one disk at a time</li>
-              <li>A larger disk cannot be placed on a smaller disk</li>
-              <li>You can use auxiliary pegs to help move disks</li>
-              <li>Goal: Move all disks from Peg A to Peg D</li>
-            </ul>
+        {/* Animated Tower of Hanoi */}
+        <div className="welcome-tower-container">
+          <div className="welcome-peg-structure">
+            <div className="welcome-peg-rod"></div>
+            <div className="welcome-disk-stack">
+              {[5, 4, 3, 2, 1].map((disk) => (
+                <div
+                  key={disk}
+                  className="welcome-disk"
+                  style={{
+                    width: `${40 + disk * 20}px`,
+                    backgroundColor: `hsl(${(disk * 40) % 360}, 65%, 65%)`,
+                    animationDelay: `${(5 - disk) * 0.15}s`
+                  }}
+                >
+                  {disk}
+                </div>
+              ))}
+            </div>
+            <div className="welcome-peg-base">A</div>
           </div>
         </div>
 
-        <div className="name-input-section">
-          <label htmlFor="playerName" className="name-label">
-            👤 Enter Your Name
-          </label>
-          <input
-            type="text"
-            id="playerName"
-            value={playerName}
-            onChange={(e) => {
-              setPlayerName(e.target.value);
-              setError('');
-            }}
-            placeholder="Your name here..."
-            maxLength={50}
-            className="name-input"
-            onKeyPress={(e) => e.key === 'Enter' && handleStart()}
-          />
-          {error && <p className="error-text">{error}</p>}
+        <h1 className="welcome-title">Tower of Hanoi</h1>
+        <p className="welcome-subtitle">
+          A classic mathematical puzzle game
+        </p>
+
+        <div className="quick-rules">
+          <div className="rules-header">
+            <Info size={20} />
+            <span>Quick Rules Summary</span>
+          </div>
+          <ul className="rules-list">
+            <li>Move all disks from source to destination peg</li>
+            <li>Only one disk can be moved at a time</li>
+            <li>A larger disk cannot be placed on a smaller disk</li>
+            <li>You can use auxiliary pegs to help</li>
+          </ul>
         </div>
 
-        <div className="welcome-buttons">
-          <button className="back-button" onClick={handleBackToMenu}>
-            <ArrowLeft size={20} />
-            Back to Main Menu
-          </button>
-          <button className="start-button" onClick={handleStart}>
-            <Play size={20} />
+        <form onSubmit={handleSubmit} className="welcome-form">
+          <div className="form-group">
+            <label htmlFor="playerName">Enter Your Name</label>
+            <input
+              id="playerName"
+              type="text"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+                setError('');
+              }}
+              placeholder="Your name..."
+              className={error ? 'input-error' : ''}
+            />
+            {error && <span className="error-text">{error}</span>}
+          </div>
+
+          <button type="submit" className="start-button">
             Start Game
+            <ArrowRight size={20} />
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

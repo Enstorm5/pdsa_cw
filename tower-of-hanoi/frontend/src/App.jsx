@@ -93,6 +93,7 @@ function App() {
             numberOfDisks={numberOfDisks}
             numberOfPegs={numberOfPegs}
             onContinue={handleInstructionsComplete}
+            onBack={() => setGameState('diskGen')}  // back btn
           />
         )}
         {gameState === 'playing' && (

@@ -1,95 +1,89 @@
-import { ArrowRight, Circle, XCircle, CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Play, Info, Target, Hand, Trophy, ArrowLeft } from 'lucide-react';
 import './GameInstructions.css';
 
-function GameInstructions({ numberOfDisks, numberOfPegs, onContinue }) {
+function GameInstructions({ numberOfDisks, numberOfPegs, onContinue, onBack }) {
   return (
-    <div className="instructions-screen">
+    <div className="instructions-container">
       <div className="instructions-card">
-        <div className="instructions-header">
-          <div className="laurel-icon">🏆</div>
-          <h2 className="instructions-title">Game Rules & Instructions</h2>
-        </div>
+        <button className="back-button-instructions" onClick={onBack}>
+          <ArrowLeft size={20} />
+          Back
+        </button>
+
+        <h2 className="instructions-title">Game Rules & Instructions</h2>
 
         <div className="rules-grid">
-          <div className="rule-item">
-            <div className="rule-icon valid">
-              <CheckCircle size={32} />
+          <div className="rule-card">
+            <div className="rule-icon" style={{ backgroundColor: '#3B82F6' }}>
+              <Target size={32} />
             </div>
-            <div className="rule-content">
-              <h3>Move One Disk at a Time</h3>
-              <p>You can only move the top disk from any peg</p>
-            </div>
+            <h3>Objective</h3>
+            <p>Move all {numberOfDisks} disks from peg A to peg {numberOfPegs === 3 ? 'C' : 'D'}</p>
           </div>
 
-          <div className="rule-item">
-            <div className="rule-icon invalid">
-              <XCircle size={32} />
+          <div className="rule-card">
+            <div className="rule-icon" style={{ backgroundColor: '#EAB308' }}>
+              <Hand size={32} />
             </div>
-            <div className="rule-content">
-              <h3>No Larger on Smaller</h3>
-              <p>A larger disk cannot be placed on top of a smaller disk</p>
-            </div>
+            <h3>One at a Time</h3>
+            <p>Only move one disk at a time from the top of any stack</p>
           </div>
 
-          <div className="rule-item">
-            <div className="rule-icon info">
-              <Circle size={32} />
+          <div className="rule-card">
+            <div className="rule-icon" style={{ backgroundColor: '#22C55E' }}>
+              <Info size={32} />
             </div>
-            <div className="rule-content">
-              <h3>Use Auxiliary Pegs</h3>
-              <p>You may use the auxiliary peg(s) to help move disks</p>
-            </div>
+            <h3>Size Rule</h3>
+            <p>Never place a larger disk on top of a smaller disk</p>
           </div>
 
-          <div className="rule-item">
-            <div className="rule-icon goal">
-              <div className="goal-pegs">
-                <span>A</span>
-                <span>→</span>
-                <span>D</span>
-              </div>
+          <div className="rule-card">
+            <div className="rule-icon" style={{ backgroundColor: '#F97316' }}>
+              <Trophy size={32} />
             </div>
-            <div className="rule-content">
-              <h3>Your Goal</h3>
-              <p>Move all {numberOfDisks} disks from Peg A to Peg D</p>
-            </div>
+            <h3>Win Condition</h3>
+            <p>Complete the puzzle in the minimum number of moves</p>
           </div>
         </div>
 
         <div className="game-setup-info">
-          <div className="setup-badge">
-            <span className="badge-label">Disks:</span>
-            <span className="badge-value">{numberOfDisks}</span>
-          </div>
-          <div className="setup-badge">
-            <span className="badge-label">Pegs:</span>
-            <span className="badge-value">{numberOfPegs}</span>
-          </div>
-        </div>
-
-        <div className="play-modes">
-          <h3>How to Play:</h3>
-          <div className="modes-list">
-            <div className="mode-option">
-              <span className="mode-icon">🖱️</span>
-              <div>
-                <strong>Drag & Drop Mode:</strong>
-                <p>Click and drag disks between pegs. Moves are counted automatically.</p>
-              </div>
+          <h3>Your Game Setup</h3>
+          <div className="setup-details">
+            <div className="setup-item">
+              <span className="setup-label">Number of Disks:</span>
+              <span className="setup-value">{numberOfDisks}</span>
             </div>
-            <div className="mode-option">
-              <span className="mode-icon">⌨️</span>
-              <div>
-                <strong>Manual Entry Mode:</strong>
-                <p>Type the number of moves and sequence manually.</p>
-              </div>
+            <div className="setup-item">
+              <span className="setup-label">Number of Pegs:</span>
+              <span className="setup-value">{numberOfPegs}</span>
+            </div>
+            <div className="setup-item">
+              <span className="setup-label">Difficulty:</span>
+              <span className="setup-value">
+                {numberOfDisks <= 5 ? 'Easy' : numberOfDisks <= 7 ? 'Medium' : 'Hard'}
+              </span>
             </div>
           </div>
         </div>
 
-        <button className="continue-button-inst" onClick={onContinue}>
+        <div className="how-to-play">
+          <h3>How to Play</h3>
+          <div className="play-modes">
+            <div className="mode-option">
+              <strong>🖱️ Drag & Drop Mode:</strong>
+              <p>Click and drag disks from one peg to another. The game will validate your moves automatically.</p>
+            </div>
+            <div className="mode-option">
+              <strong>⌨️ Manual Entry Mode:</strong>
+              <p>Enter the total number of moves and the complete sequence (e.g., A→C, A→B, C→B). Submit when ready!</p>
+            </div>
+          </div>
+        </div>
+
+        <button className="lets-play-button" onClick={onContinue}>
+          <Play size={24} />
           Let's Play!
-          <ArrowRight size={20} />
         </button>
       </div>
     </div>
