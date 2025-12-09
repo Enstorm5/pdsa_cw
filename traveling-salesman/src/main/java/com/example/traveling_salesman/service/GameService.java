@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,15 +69,15 @@ public class GameService {
 		for (TspAlgorithm algorithm : algorithms) {
 			long start = System.nanoTime();
 			TspSolution solution = algorithm.solve(homeCity, visitCities, matrix);
-			long elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start);
+			long elapsedNs = System.nanoTime() - start;
 
-			session.addTimeLog(createTimeLog(algorithm.name(), elapsed));
+			session.addTimeLog(createTimeLog(algorithm.name(), elapsedNs));
 
 			algorithmResults.add(new AlgorithmResult(
 					algorithm.name(),
 					toCityStrings(solution.getOrderedPath()),
 					solution.getTotalDistance(),
-					elapsed));
+					elapsedNs));
 		}
 
 		gameSessionRepository.save(session);
@@ -143,10 +142,10 @@ public class GameService {
 		gameResultRepository.save(result);
 	}
 
-	private AlgorithmTimeLog createTimeLog(String algorithmName, long elapsedMs) {
+	private AlgorithmTimeLog createTimeLog(String algorithmName, long elapsedNs) {
 		AlgorithmTimeLog timeLog = new AlgorithmTimeLog();
 		timeLog.setAlgorithmName(algorithmName);
-		timeLog.setTimeTakenMs(elapsedMs);
+		timeLog.setTimeTakenNs(elapsedNs);
 		return timeLog;
 	}
 

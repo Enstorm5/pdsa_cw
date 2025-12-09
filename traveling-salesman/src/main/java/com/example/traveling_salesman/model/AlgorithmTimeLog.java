@@ -25,8 +25,8 @@ public class AlgorithmTimeLog {
 	@Column(name = "algorithm_name", nullable = false, length = 50)
 	private String algorithmName;
 
-	@Column(name = "time_taken_ms", nullable = false)
-	private long timeTakenMs;
+	@Column(name = "time_taken_ns", nullable = false)
+	private long timeTakenNs;
 
 	public Long getId() {
 		return id;
@@ -48,11 +48,11 @@ public class AlgorithmTimeLog {
 		this.algorithmName = algorithmName;
 	}
 
-	public long getTimeTakenMs() {
-		return timeTakenMs;
+	public long getTimeTakenNs() {
+		return timeTakenNs;
 	}
 
-	public void setTimeTakenMs(long timeTakenMs) {
-		this.timeTakenMs = timeTakenMs;
+	public void setTimeTakenNs(long timeTakenNs) {
+		this.timeTakenNs = timeTakenNs;
 	}
 }

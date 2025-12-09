@@ -73,15 +73,15 @@ public class GameRoundResponse {
 		private String algorithmName;
 		private List<String> path;
 		private int totalDistance;
-		private long timeTakenMs;
+		private long timeTakenNs;
 
 		public AlgorithmResult() {}
 
-		public AlgorithmResult(String algorithmName, List<String> path, int totalDistance, long timeTakenMs) {
+		public AlgorithmResult(String algorithmName, List<String> path, int totalDistance, long timeTakenNs) {
 			this.algorithmName = algorithmName;
 			this.path = path;
 			this.totalDistance = totalDistance;
-			this.timeTakenMs = timeTakenMs;
+			this.timeTakenNs = timeTakenNs;
 		}
 
 		public String getAlgorithmName() {
@@ -108,12 +108,12 @@ public class GameRoundResponse {
 			this.totalDistance = totalDistance;
 		}
 
-		public long getTimeTakenMs() {
-			return timeTakenMs;
+		public long getTimeTakenNs() {
+			return timeTakenNs;
 		}
 
-		public void setTimeTakenMs(long timeTakenMs) {
-			this.timeTakenMs = timeTakenMs;
+		public void setTimeTakenNs(long timeTakenNs) {
+			this.timeTakenNs = timeTakenNs;
 		}
 	}
 }
