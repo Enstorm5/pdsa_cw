@@ -82,11 +82,14 @@ public class GameController {
         int reported = body.getOrDefault("reported", 0) instanceof Number ? ((Number)body.getOrDefault("reported",0)).intValue() : 0;
         String name = (String) body.getOrDefault("name", "");
 
+
         long t1 = System.currentTimeMillis();
         int ek = maxFlowService.edmondsKarp(mat);
         long t2 = System.currentTimeMillis();
         int dinic = maxFlowService.dinic(mat);
         long t3 = System.currentTimeMillis();
+
+        System.out.println("Calculated correct max flow = "+ek);
 
         Map<String,Object> res = new HashMap<>();
         res.put("edmondsKarp", ek);

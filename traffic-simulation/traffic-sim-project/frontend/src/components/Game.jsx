@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Confetti from 'react-confetti';
 
 const names = ['A','B','C','D','E','F','G','H','T'];
 
@@ -28,6 +29,18 @@ function Game() {
       .catch(e => { console.error(e); alert('Backend must be running on port 8080'); });
   }
 
+  
+
+   //  RETRY BUTTON (same graph, reset only inputs)
+  const retryGame = () => {
+    setReported('');
+    setName('');
+    setResult(null);
+    setStatus('');
+    setHighlightEdges([]);
+  };
+
+
   const renderGraph = () => {
     if(!edges || edges.length === 0) return null;
     const pos = {
@@ -55,6 +68,7 @@ function Game() {
             </g>
           )
         })}
+    
 
         {/* nodes */}
         {Object.keys(pos).map(k => {
@@ -96,11 +110,18 @@ function Game() {
   }
 
   return (
+    
     <div style={{fontFamily:'Arial, sans-serif',padding:20,maxWidth:800,margin:'0 auto'}}>
+        {status === 'win' && (
+        <Confetti numberOfPieces={300} recycle={false} />
+      )}
       <h2 style={{color:'#0073e6'}}>Traffic Simulation Game</h2>
       <button onClick={newGame} style={{background:'#0073e6',color:'#fff',border:'none',padding:'8px 16px',borderRadius:6,cursor:'pointer'}}>
-        🎲 New Game (Random Capacities)
+        🎲 New Game
       </button>
+
+      <button onClick={retryGame} style={{marginLeft:10,background:'#ffc107',color:'#000',border:'none',padding:'8px 16px',borderRadius:6,cursor:'pointer'}}> 
+        🔁 Try Again </button>
 
       <div style={{marginTop:20}}>{renderGraph()}</div>
 
@@ -111,12 +132,12 @@ function Game() {
       </div>
       <div style={{marginTop:10}}>
         <label>Your name: </label>
-        <input value={name} onChange={e => setName(e.target.value)} placeholder="Optional"
+        <input value={name} onChange={e => setName(e.target.value)}
           style={{padding:6,marginLeft:10,width:200,borderRadius:4,border:'1px solid #ccc'}} />
       </div>
       <div style={{marginTop:12}}>
         <button onClick={submitAnswer} style={{background:'#28a745',color:'#fff',border:'none',padding:'8px 16px',borderRadius:6,cursor:'pointer'}}>
-          ✅ Submit Answer
+           Submit Answer
         </button>
       </div>
 
@@ -126,10 +147,10 @@ function Game() {
           <p><strong>Correct Maximum Flow (A→T):</strong> <span style={{color:'#0073e6',fontWeight:'bold'}}>{result.edmondsKarp}</span></p>
           <p><strong>Edmonds-Karp Computed Flow:</strong> {result.edmondsKarp} (time {result.ekTimeMs} ms)</p>
           <p><strong>Dinic Computed Flow:</strong> {result.dinic} (time {result.dinicTimeMs} ms)</p>
-          <p><strong>Your Reported Flow:</strong> {result.reported} — {result.correct?'Correct 🎉':'Incorrect ❌'}</p>
-          {/* Mini description how answer is calculated */}
+          <p><strong>Your answer:</strong> {result.reported} — {result.correct?'Correct 🎉':'Incorrect ❌'}</p>
+          {/* Instructions to the user */}
           <div style={{marginTop:10,padding:8,background:'#e9ecef',borderRadius:6}}>
-            <strong>How to get the correct answer:</strong>
+            <strong>Tips:</strong>
             <ul style={{marginTop:5,marginLeft:20}}>
               <li>Check all paths from <strong>A → T</strong>.</li>
               <li>For each path, find the minimum capacity (bottleneck).</li>
@@ -141,10 +162,10 @@ function Game() {
       )}
 
       {status==='win' && <div style={{marginTop:12,padding:10,borderRadius:6,background:'#d4edda',color:'#155724'}}>
-        🎉 You win! Your result is saved.
+        🎉 Congratulations. You won!!
       </div>}
       {status==='lose' && <div style={{marginTop:12,padding:10,borderRadius:6,background:'#f8d7da',color:'#721c24'}}>
-        ❌ Wrong answer — try again!
+        ❌ Wrong answer. Try again!
       </div>}
     </div>
   )
