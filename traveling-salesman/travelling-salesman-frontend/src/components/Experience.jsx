@@ -41,6 +41,8 @@ export default function Experience({ gameData }) {
         return lines;
     }, [distanceMatrix, cityPositions]);
 
+    const [hoveredConnection, setHoveredConnection] = React.useState(null);
+
     return (
         <>
             <color attach="background" args={['#050511']} />
@@ -49,8 +51,7 @@ export default function Experience({ gameData }) {
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} intensity={1} />
 
-            <OrbitControls makeDefault autoRotate autoRotateSpeed={0.5} />
-            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+            <OrbitControls makeDefault autoRotate={false} />
 
             <group>
                 {cityLabels.map((name, index) => (
@@ -64,9 +65,12 @@ export default function Experience({ gameData }) {
                 {connections.map((conn) => (
                     <ConnectionLine
                         key={conn.key}
+                        id={conn.key}
                         start={conn.start}
                         end={conn.end}
                         distance={conn.distance}
+                        isHovered={hoveredConnection === conn.key}
+                        setHovered={setHoveredConnection}
                     />
                 ))}
             </group>
