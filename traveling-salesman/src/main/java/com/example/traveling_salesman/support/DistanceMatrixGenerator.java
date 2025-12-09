@@ -1,9 +1,11 @@
 package com.example.traveling_salesman.support;
 
-import com.example.traveling_salesman.model.DistanceMatrix;
 import java.security.SecureRandom;
 import java.util.Random;
+
 import org.springframework.stereotype.Component;
+
+import com.example.traveling_salesman.model.DistanceMatrix;
 
 @Component
 public class DistanceMatrixGenerator {
