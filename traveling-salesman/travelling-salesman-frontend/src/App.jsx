@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import Interface from './components/Interface';
+import Experience from './components/Experience';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameData, setGameData] = useState(null);
+
+  const handleGameStart = (data) => {
+    setGameData(data);
+    setGameStarted(true);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+        <Canvas camera={{ position: [0, 15, 20], fov: 45 }}>
+          {gameStarted && gameData && <Experience gameData={gameData} />}
+        </Canvas>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      {!gameStarted && (
+        <Interface onGameStart={handleGameStart} />
+      )}
+
+      {/* Simple overlay to show player info if game is started */}
+      {gameStarted && gameData && (
+        <div style={{
+          position: 'absolute',
+          top: '20px',
+          left: '20px',
+          color: 'white',
+          background: 'rgba(0,0,0,0.5)',
+          padding: '20px',
+          borderRadius: '10px',
+          pointerEvents: 'none',
+          fontFamily: 'monospace'
+        }}>
+          <h3>Mission Control</h3>
+          <p>Pilot: {gameData.playerName}</p>
+          <p>Home Base: {gameData.homeCity}</p>
+          <p>Session: #{gameData.sessionId}</p>
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
