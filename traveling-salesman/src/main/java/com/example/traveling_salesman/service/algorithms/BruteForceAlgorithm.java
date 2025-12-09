@@ -28,29 +28,30 @@ public class BruteForceAlgorithm implements TspAlgorithm {
 			return new TspSolution(List.of(homeCity, homeCity), 0);
 		}
 
-		List<City> bestRoute = null;
-		int bestDistance = Integer.MAX_VALUE;
+		List<City>[] bestRoute = new List[] {null};
+		int[] bestDistance = new int[] {Integer.MAX_VALUE};
 
 		permute(remaining, 0, matrix, homeCity, (route, distance) -> {
-			if (distance < bestDistance) {
-				bestDistance = distance;
-				bestRoute = new ArrayList<>(route);
+			if (distance < bestDistance[0]) {
+				bestDistance[0] = distance;
+				bestRoute[0] = new ArrayList<>(route);
 			}
 		});
 
 		List<City> path = new ArrayList<>();
 		path.add(homeCity);
-		if (bestRoute != null) {
-			path.addAll(bestRoute);
+		if (bestRoute[0] != null) {
+			path.addAll(bestRoute[0]);
 		}
 		path.add(homeCity);
-		return new TspSolution(path, bestDistance);
+		return new TspSolution(path, bestDistance[0]);
 	}
 
 	private void permute(List<City> cities, int index, DistanceMatrix matrix, City homeCity, RouteConsumer consumer) {
 		if (index == cities.size()) {
-			int distance = routeDistance(homeCity, cities, matrix);
-			consumer.accept(cities, distance);
+			List<City> snapshot = List.copyOf(cities);
+			int distance = routeDistance(homeCity, snapshot, matrix);
+			consumer.accept(snapshot, distance);
 			return;
 		}
 		for (int i = index; i < cities.size(); i++) {

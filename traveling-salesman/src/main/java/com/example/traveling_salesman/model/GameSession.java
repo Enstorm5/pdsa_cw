@@ -33,7 +33,7 @@ public class GameSession {
 	private City homeCity;
 
 	@Lob
-	@Column(name = "distance_matrix", nullable = false)
+	@Column(name = "distance_matrix", nullable = false, columnDefinition = "LONGTEXT")
 	private String distanceMatrixJson;
 
 	@Column(name = "created_at", nullable = false, updatable = false)
