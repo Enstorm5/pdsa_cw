@@ -63,6 +63,7 @@ public class GameController {
         return res;
     }
 
+
     // Solve request: client provides matrix and player's reported value and name (optional)
     @PostMapping("/solve")
     public Map<String,Object> solve(@RequestBody Map<String,Object> body){
@@ -83,9 +84,12 @@ public class GameController {
         String name = (String) body.getOrDefault("name", "");
 
 
+        //edmondsKarp Algorithm
         long t1 = System.currentTimeMillis();
         int ek = maxFlowService.edmondsKarp(mat);
         long t2 = System.currentTimeMillis();
+
+        //dinic Algorithm
         int dinic = maxFlowService.dinic(mat);
         long t3 = System.currentTimeMillis();
 
