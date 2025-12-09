@@ -1,8 +1,10 @@
 package com.example.traveling_salesman.controller;
 
+import com.example.traveling_salesman.dto.AlgorithmEvaluationResponse;
 import com.example.traveling_salesman.dto.ErrorResponse;
 import com.example.traveling_salesman.dto.GameResponse;
 import com.example.traveling_salesman.dto.GameRoundResponse;
+import com.example.traveling_salesman.dto.SelectCitiesRequest;
 import com.example.traveling_salesman.dto.SolveAttemptRequest;
 import com.example.traveling_salesman.dto.StartGameRequest;
 import com.example.traveling_salesman.service.GameService;
@@ -29,6 +31,11 @@ public class GameController {
 	@PostMapping("/start")
 	public GameRoundResponse start(@RequestBody StartGameRequest request) {
 		return gameService.startGame(request);
+	}
+
+	@PostMapping("/select-cities")
+	public AlgorithmEvaluationResponse selectCities(@RequestBody SelectCitiesRequest request) {
+		return gameService.evaluateSelection(request);
 	}
 
 	@PostMapping("/solve")

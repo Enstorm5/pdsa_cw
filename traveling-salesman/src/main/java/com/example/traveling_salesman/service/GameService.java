@@ -1,8 +1,10 @@
 package com.example.traveling_salesman.service;
 
+import com.example.traveling_salesman.dto.AlgorithmEvaluationResponse;
+import com.example.traveling_salesman.dto.AlgorithmResultDto;
 import com.example.traveling_salesman.dto.GameResponse;
 import com.example.traveling_salesman.dto.GameRoundResponse;
-import com.example.traveling_salesman.dto.GameRoundResponse.AlgorithmResult;
+import com.example.traveling_salesman.dto.SelectCitiesRequest;
 import com.example.traveling_salesman.dto.SolveAttemptRequest;
 import com.example.traveling_salesman.dto.StartGameRequest;
 import com.example.traveling_salesman.model.AlgorithmTimeLog;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,20 +55,40 @@ public class GameService {
 
 	@Transactional
 	public GameRoundResponse startGame(StartGameRequest request) {
-		if (algorithms.isEmpty()) {
-			throw new IllegalStateException("No TSP algorithms registered");
-		}
 		DistanceMatrix matrix = distanceMatrixGenerator.generate();
-		City homeCity = parseCity(request.getHomeCity());
-		List<City> visitCities = toCityList(request.getCitiesToVisit());
-		visitCities.removeIf(city -> city == homeCity);
+		City homeCity = randomHomeCity();
 
 		GameSession session = new GameSession();
 		session.setPlayerName(request.getPlayerName());
 		session.setHomeCity(homeCity);
 		session.setDistanceMatrixJson(writeMatrix(matrix));
 
-		List<AlgorithmResult> algorithmResults = new ArrayList<>();
+		gameSessionRepository.save(session);
+
+		GameRoundResponse response = new GameRoundResponse();
+		response.setSessionId(session.getId());
+		response.setPlayerName(request.getPlayerName());
+		response.setHomeCity(homeCity.name());
+		response.setCityLabels(Arrays.stream(City.values()).map(Enum::name).toList());
+		response.setDistanceMatrix(matrix.toArray());
+		return response;
+	}
+
+	@Transactional
+	public AlgorithmEvaluationResponse evaluateSelection(SelectCitiesRequest request) {
+		if (algorithms.isEmpty()) {
+			throw new IllegalStateException("No TSP algorithms registered");
+		}
+		GameSession session = gameSessionRepository
+				.findById(request.getSessionId())
+				.orElseThrow(() -> new IllegalArgumentException("Game session not found"));
+
+		DistanceMatrix matrix = readMatrix(session.getDistanceMatrixJson());
+		City homeCity = session.getHomeCity();
+		List<City> visitCities = toCityList(request.getCities());
+		visitCities.removeIf(city -> city == homeCity);
+
+		List<AlgorithmResultDto> algorithmResults = new ArrayList<>();
 		for (TspAlgorithm algorithm : algorithms) {
 			long start = System.nanoTime();
 			TspSolution solution = algorithm.solve(homeCity, visitCities, matrix);
@@ -73,7 +96,7 @@ public class GameService {
 
 			session.addTimeLog(createTimeLog(algorithm.name(), elapsedNs));
 
-			algorithmResults.add(new AlgorithmResult(
+			algorithmResults.add(new AlgorithmResultDto(
 					algorithm.name(),
 					toCityStrings(solution.getOrderedPath()),
 					solution.getTotalDistance(),
@@ -82,13 +105,10 @@ public class GameService {
 
 		gameSessionRepository.save(session);
 
-		GameRoundResponse response = new GameRoundResponse();
+		AlgorithmEvaluationResponse response = new AlgorithmEvaluationResponse();
 		response.setSessionId(session.getId());
-		response.setPlayerName(request.getPlayerName());
 		response.setHomeCity(homeCity.name());
-		response.setCitiesToVisit(toCityStrings(visitCities));
-		response.setCityLabels(Arrays.stream(City.values()).map(Enum::name).toList());
-		response.setDistanceMatrix(matrix.toArray());
+		response.setSelectedCities(toCityStrings(visitCities));
 		response.setAlgorithmResults(algorithmResults);
 		return response;
 	}
@@ -177,11 +197,9 @@ public class GameService {
 		}
 	}
 
-	private City parseCity(String name) {
-		if (name == null || name.isBlank()) {
-			throw new IllegalArgumentException("Home city must be provided");
-		}
-		return City.valueOf(name.trim().toUpperCase(Locale.ROOT));
+	private City randomHomeCity() {
+		City[] cities = City.values();
+		return cities[ThreadLocalRandom.current().nextInt(cities.length)];
 	}
 
 	private List<City> toCityList(List<String> names) {

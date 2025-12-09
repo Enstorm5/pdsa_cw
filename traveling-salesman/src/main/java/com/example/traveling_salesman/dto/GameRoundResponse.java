@@ -8,10 +8,9 @@ public class GameRoundResponse {
 	private Long sessionId;
 	private String playerName;
 	private String homeCity;
-	private List<String> citiesToVisit = new ArrayList<>();
 	private List<String> cityLabels = new ArrayList<>();
 	private int[][] distanceMatrix;
-	private List<AlgorithmResult> algorithmResults = new ArrayList<>();
+	private List<AlgorithmResultDto> algorithmResults = new ArrayList<>();
 
 	public Long getSessionId() {
 		return sessionId;
@@ -37,14 +36,6 @@ public class GameRoundResponse {
 		this.homeCity = homeCity;
 	}
 
-	public List<String> getCitiesToVisit() {
-		return citiesToVisit;
-	}
-
-	public void setCitiesToVisit(List<String> citiesToVisit) {
-		this.citiesToVisit = citiesToVisit;
-	}
-
 	public List<String> getCityLabels() {
 		return cityLabels;
 	}
@@ -61,59 +52,11 @@ public class GameRoundResponse {
 		this.distanceMatrix = distanceMatrix;
 	}
 
-	public List<AlgorithmResult> getAlgorithmResults() {
+	public List<AlgorithmResultDto> getAlgorithmResults() {
 		return algorithmResults;
 	}
 
-	public void setAlgorithmResults(List<AlgorithmResult> algorithmResults) {
+	public void setAlgorithmResults(List<AlgorithmResultDto> algorithmResults) {
 		this.algorithmResults = algorithmResults;
-	}
-
-	public static class AlgorithmResult {
-		private String algorithmName;
-		private List<String> path;
-		private int totalDistance;
-		private long timeTakenNs;
-
-		public AlgorithmResult() {}
-
-		public AlgorithmResult(String algorithmName, List<String> path, int totalDistance, long timeTakenNs) {
-			this.algorithmName = algorithmName;
-			this.path = path;
-			this.totalDistance = totalDistance;
-			this.timeTakenNs = timeTakenNs;
-		}
-
-		public String getAlgorithmName() {
-			return algorithmName;
-		}
-
-		public void setAlgorithmName(String algorithmName) {
-			this.algorithmName = algorithmName;
-		}
-
-		public List<String> getPath() {
-			return path;
-		}
-
-		public void setPath(List<String> path) {
-			this.path = path;
-		}
-
-		public int getTotalDistance() {
-			return totalDistance;
-		}
-
-		public void setTotalDistance(int totalDistance) {
-			this.totalDistance = totalDistance;
-		}
-
-		public long getTimeTakenNs() {
-			return timeTakenNs;
-		}
-
-		public void setTimeTakenNs(long timeTakenNs) {
-			this.timeTakenNs = timeTakenNs;
-		}
 	}
 }
