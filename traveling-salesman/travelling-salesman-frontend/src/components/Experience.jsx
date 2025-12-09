@@ -4,7 +4,7 @@ import CityNode from './CityNode';
 import ConnectionLine from './ConnectionLine';
 import * as THREE from 'three';
 
-export default function Experience({ gameData }) {
+export default function Experience({ gameData, selectedCities = [] }) {
     const { cityLabels, distanceMatrix } = gameData;
 
     // Calculate positions in a circle
@@ -54,13 +54,20 @@ export default function Experience({ gameData }) {
             <OrbitControls makeDefault autoRotate={false} />
 
             <group>
-                {cityLabels.map((name, index) => (
-                    <CityNode
-                        key={name}
-                        position={cityPositions[index]}
-                        name={name}
-                    />
-                ))}
+                {cityLabels.map((name, index) => {
+                    const selectionIndex = selectedCities ? selectedCities.indexOf(name) : -1;
+                    const isSelected = selectionIndex !== -1;
+
+                    return (
+                        <CityNode
+                            key={name}
+                            position={cityPositions[index]}
+                            name={name}
+                            isSelected={isSelected}
+                            selectionOrder={selectionIndex + 1}
+                        />
+                    );
+                })}
 
                 {connections.map((conn) => (
                     <ConnectionLine

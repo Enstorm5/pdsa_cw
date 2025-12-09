@@ -26,7 +26,6 @@ export default function Interface({ onGameStart }) {
         <div className="interface-container">
             <div className="glass-panel">
                 <h1 className="title">Traveling Salesman</h1>
-                <p className="subtitle">Galactic Edition</p>
 
                 <form onSubmit={handleSubmit} className="start-form">
                     <input
@@ -38,7 +37,7 @@ export default function Interface({ onGameStart }) {
                         disabled={loading}
                     />
                     <button type="submit" className="start-button" disabled={loading}>
-                        {loading ? 'Initializing...' : 'Start Journey'}
+                        {loading ? 'Initializing...' : 'Start Game'}
                     </button>
                 </form>
                 {error && <div className="error-message">{error}</div>}
