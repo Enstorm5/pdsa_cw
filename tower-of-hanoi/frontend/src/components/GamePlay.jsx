@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { Send, Loader, ArrowLeft, RotateCcw, Clock } from 'lucide-react';
+import { Send, Loader, X, RotateCcw, Clock } from 'lucide-react';
 import './GamePlay.css';
 
 function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit, onBack }) {
@@ -266,8 +266,9 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
     <div className="gameplay-container">
       {/* Header with stats */}
       <div className="gameplay-header">
-        <button className="icon-button" onClick={onBack}>
-          <ArrowLeft size={20} />
+        <button className="quit-button-game" onClick={onBack}>
+          <X size={20} />
+          Quit Game
         </button>
         
         <div className="game-stats-header">
@@ -393,50 +394,66 @@ function GamePlay({ playerName, numberOfDisks, numberOfPegs, gameData, onSubmit,
               </div>
 
               <form onSubmit={handleManualSubmit} className="manual-form">
-                <div className="form-group">
-                  <label>Number of Moves</label>
-                  <input
-                    type="number"
-                    value={manualMoves}
-                    onChange={(e) => setManualMoves(e.target.value)}
-                    placeholder="e.g., 31"
-                    required
-                    min="1"
-                    disabled={animatingManual}
-                  />
-                </div>
+  <div className="form-group">
+    <label>Number of Moves</label>
+    <input
+      type="number"
+      value={manualMoves}
+      onChange={(e) => setManualMoves(e.target.value)}
+      onBlur={(e) => {
+        // Ensure value stays stable after blur
+        if (e.target.value) {
+          setManualMoves(e.target.value);
+        }
+      }}
+      placeholder="e.g., 31"
+      required
+      min="1"
+      disabled={animatingManual}
+      autoComplete="off"
+    />
+  </div>
 
-                <div className="form-group">
-                  <label>Move Sequence</label>
-                  <textarea
-                    value={manualSequence}
-                    onChange={(e) => setManualSequence(e.target.value)}
-                    placeholder="e.g., A->C, A->B, C->B, ..."
-                    required
-                    rows="4"
-                    disabled={animatingManual}
-                  />
-                  <small>Format: A→C, A→B, C→B (comma-separated)</small>
-                </div>
+  <div className="form-group">
+    <label>Move Sequence</label>
+    <textarea
+      value={manualSequence}
+      onChange={(e) => {
+        e.preventDefault();
+        setManualSequence(e.target.value);
+      }}
+      onPaste={(e) => {
+        e.preventDefault();
+        const pastedText = e.clipboardData.getData('text');
+        setManualSequence(pastedText);
+      }}
+      placeholder="e.g., A->C, A->B, C->B, ..."
+      required
+      rows="4"
+      disabled={animatingManual}
+      autoComplete="off"
+    />
+    <small>Format: A→C, A→B, C→B (comma-separated)</small>
+  </div>
 
-                <button 
-                  type="submit" 
-                  className="submit-button" 
-                  disabled={submitLoading || animatingManual}
-                >
-                  {submitLoading || animatingManual ? (
-                    <>
-                      <Loader className="spinner" />
-                      {animatingManual ? 'Animating...' : 'Submitting...'}
-                    </>
-                  ) : (
-                    <>
-                      <Send size={20} />
-                      Submit Answer
-                    </>
-                  )}
-                </button>
-              </form>
+  <button 
+    type="submit" 
+    className="submit-button" 
+    disabled={submitLoading || animatingManual}
+  >
+    {submitLoading || animatingManual ? (
+      <>
+        <Loader className="spinner" />
+        {animatingManual ? 'Animating...' : 'Submitting...'}
+      </>
+    ) : (
+      <>
+        <Send size={20} />
+        Submit Answer
+      </>
+    )}
+  </button>
+</form>
             </div>
           )}
         </div>

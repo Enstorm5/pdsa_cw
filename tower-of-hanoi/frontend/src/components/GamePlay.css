@@ -19,6 +19,29 @@
   border: 2px solid #F4D9A0;
 }
 
+/* ✅ QUIT BUTTON STYLE */
+.quit-button-game {
+  background: #FEE2E2;
+  border: 2px solid #FCA5A5;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #DC2626;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.quit-button-game:hover {
+  background: #DC2626;
+  color: #FFFFFF;
+  border-color: #DC2626;
+  transform: scale(1.05);
+}
+
 .icon-button {
   background: #FFF9F0;
   border: 2px solid #F4D9A0;
@@ -609,6 +632,11 @@
   
   .game-stats-header {
     gap: 1rem;
+  }
+  
+  .quit-button-game {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.8rem;
   }
   
   .pegs-container {

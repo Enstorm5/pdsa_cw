@@ -1,14 +1,13 @@
-import { useState } from 'react';
-import { Play, Info, Target, Hand, Trophy, ArrowLeft } from 'lucide-react';
+import { Play, Info, Target, Hand, Trophy, X } from 'lucide-react';
 import './GameInstructions.css';
 
 function GameInstructions({ numberOfDisks, numberOfPegs, onContinue, onBack }) {
   return (
     <div className="instructions-container">
       <div className="instructions-card">
-        <button className="back-button-instructions" onClick={onBack}>
-          <ArrowLeft size={20} />
-          Back
+        <button className="quit-button-instructions" onClick={onBack}>
+          <X size={20} />
+          Quit Game
         </button>
 
         <h2 className="instructions-title">Game Rules & Instructions</h2>

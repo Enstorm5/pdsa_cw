@@ -1,4 +1,4 @@
-.peg-selection {
+.peg-selection-screen {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,46 +8,19 @@
 
 .pegselect-card {
   background: #FFFFFF;
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   border-radius: 25px;
   box-shadow: 0 10px 40px rgba(139, 115, 85, 0.1);
   max-width: 700px;
   width: 100%;
   border: 3px solid #F4D9A0;
-  position: relative;
-}
-
-.back-button-peg {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  background: #FFF9F0;
-  border: 2px solid #F4D9A0;
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #8B7355;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.back-button-peg:hover {
-  background: #D4AF37;
-  color: #FFFFFF;
-  border-color: #D4AF37;
-  transform: translateX(-3px);
 }
 
 .pegselect-title {
   font-size: 1.8rem;
   color: #8B7355;
   text-align: center;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   font-weight: 800;
 }
 
@@ -67,12 +40,17 @@
 
 .peg-option {
   background: #FFF9F0;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   border-radius: 20px;
   border: 3px solid #F4D9A0;
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 240px;
 }
 
 .peg-option:hover {
@@ -87,84 +65,88 @@
   box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
 }
 
-.peg-option-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 0.8rem;
-}
-
-.peg-option-header h3 {
-  font-size: 1.4rem;
-  color: #8B7355;
-  font-weight: 800;
-}
-
-.peg-option.selected .peg-option-header h3 {
-  color: #FFFFFF;
-}
-
-.peg-badge {
-  background: #D4AF37;
-  color: white;
-  padding: 0.3rem 0.7rem;
-  border-radius: 15px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.peg-option.selected .peg-badge {
-  background: #FFFFFF;
-  color: #D4AF37;
-}
-
 .peg-visual {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 0.8rem;
+  align-items: flex-end;
+  gap: 0.6rem;
+  height: 90px;
+  margin-bottom: 1.5rem;
 }
 
-.mini-peg {
+.visual-peg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.visual-rod {
   width: 8px;
-  height: 60px;
+  height: 70px;
   background: linear-gradient(180deg, #D4AF37 0%, #8B7355 100%);
   border-radius: 4px;
-  position: relative;
+  margin-bottom: 3px;
 }
 
-.mini-peg::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 8px;
+.visual-base {
+  width: 32px;
+  height: 10px;
   background: #8B7355;
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
-.peg-description {
-  font-size: 0.9rem;
+.peg-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.peg-number {
+  font-size: 3rem;
+  font-weight: 800;
   color: #8B7355;
-  line-height: 1.4;
+  line-height: 1;
 }
 
-.peg-option.selected .peg-description {
+.peg-option.selected .peg-number {
   color: #FFFFFF;
-  font-weight: 600;
 }
 
-.button-group {
+.peg-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #A0826D;
+}
+
+.peg-option.selected .peg-label {
+  color: #FFFFFF;
+}
+
+.peg-difficulty {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #D4AF37;
+  background: #FFFFFF;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  margin-top: 0.5rem;
+}
+
+.peg-option.selected .peg-difficulty {
+  background: #8B7355;
+  color: #FFFFFF;
+}
+
+.pegselect-buttons {
   display: flex;
   gap: 1rem;
 }
 
 .back-button, .confirm-button {
   flex: 1;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   font-size: 1.1rem;
   font-weight: 700;
   border: none;
@@ -185,6 +167,7 @@
 
 .back-button:hover {
   background: #F4D9A0;
+  transform: translateY(-2px);
 }
 
 .confirm-button {
@@ -207,18 +190,11 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .pegselect-card {
-    padding: 1.5rem;
-  }
-  
-  .back-button-peg {
-    position: static;
-    margin-bottom: 1rem;
-    width: fit-content;
+    padding: 2rem 1.5rem;
   }
   
   .pegselect-title {
     font-size: 1.5rem;
-    margin-top: 0;
   }
   
   .peg-options {
@@ -226,20 +202,29 @@
   }
   
   .peg-option {
-    padding: 1.2rem;
+    padding: 1.5rem 1rem;
+    min-height: 220px;
+  }
+  
+  .peg-visual {
+    height: 80px;
+  }
+  
+  .visual-rod {
+    height: 60px;
   }
 }
 
 @media (max-width: 480px) {
   .pegselect-card {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
   }
   
   .peg-options {
     grid-template-columns: 1fr;
   }
   
-  .button-group {
+  .pegselect-buttons {
     flex-direction: column;
   }
 }

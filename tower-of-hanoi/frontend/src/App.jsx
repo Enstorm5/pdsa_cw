@@ -17,12 +17,12 @@ function App() {
 
   const handleWelcomeComplete = (name) => {
     setPlayerName(name);
-    setGameState('pegSelect'); // ✅ Go directly to peg selection
+    setGameState('pegSelect');
   };
 
   const handlePegSelection = (pegs) => {
     setNumberOfPegs(pegs);
-    setGameState('diskGen'); // ✅ Show disk generation screen while loading
+    setGameState('diskGen');
   };
 
   const handleDiskGenComplete = () => {
@@ -34,10 +34,8 @@ function App() {
   };
 
   const handleGameDataReady = (data) => {
-    // ✅ Backend provides the number of disks
     setNumberOfDisks(data.numberOfDisks);
     setGameData(data);
-    // Auto-advance to instructions once data is loaded
     setGameState('instructions');
   };
 
@@ -47,8 +45,6 @@ function App() {
   };
 
   const handleBackToMenu = () => {
-    // In your main app, this would navigate back to the main menu
-    // For now, we'll reset to welcome
     setGameState('welcome');
     setPlayerName('');
     setNumberOfDisks(null);
@@ -93,7 +89,7 @@ function App() {
             numberOfDisks={numberOfDisks}
             numberOfPegs={numberOfPegs}
             onContinue={handleInstructionsComplete}
-            onBack={() => setGameState('diskGen')}  // back btn
+            onBack={handleBackToMenu}
           />
         )}
         {gameState === 'playing' && (

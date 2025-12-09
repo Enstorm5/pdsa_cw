@@ -17,28 +17,29 @@
   position: relative;
 }
 
-.back-button-instructions {
+/* ✅ QUIT BUTTON STYLE */
+.quit-button-instructions {
   position: absolute;
   top: 1.5rem;
   left: 1.5rem;
-  background: #FFF9F0;
-  border: 2px solid #F4D9A0;
+  background: #FEE2E2;
+  border: 2px solid #FCA5A5;
   padding: 0.6rem 1rem;
   border-radius: 12px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #8B7355;
+  color: #DC2626;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
 }
 
-.back-button-instructions:hover {
-  background: #D4AF37;
+.quit-button-instructions:hover {
+  background: #DC2626;
   color: #FFFFFF;
-  border-color: #D4AF37;
+  border-color: #DC2626;
   transform: translateX(-3px);
 }
 
@@ -197,6 +198,21 @@
 }
 
 @media (max-width: 768px) {
+  .instructions-card {
+    padding: 1.5rem;
+  }
+
+  .quit-button-instructions {
+    position: static;
+    margin-bottom: 1rem;
+    width: fit-content;
+  }
+
+  .instructions-title {
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+
   .rules-grid {
     grid-template-columns: repeat(2, 1fr);
   }
