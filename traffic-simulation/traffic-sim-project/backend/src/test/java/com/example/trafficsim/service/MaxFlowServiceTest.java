@@ -23,10 +23,10 @@ class MaxFlowServiceTest {
         cap[0][1] = 10; // A->B
         cap[1][8] = 5;  // B->T
 
-        // Act
+
         int result = maxFlowService.edmondsKarp(cap);
 
-        // Assert
+
         assertEquals(5, result, "Max flow should be limited by bottleneck (5)");
     }
 
@@ -40,10 +40,10 @@ class MaxFlowServiceTest {
         cap[0][2] = 10; // A->C
         cap[2][8] = 7;  // C->T
 
-        // Act
+
         int result = maxFlowService.edmondsKarp(cap);
 
-        // Assert
+
         assertEquals(15, result, "Max flow should be sum of both paths (8+7)");
     }
 
@@ -66,10 +66,10 @@ class MaxFlowServiceTest {
         cap[6][8] = 10; // G->T
         cap[7][8] = 10; // H->T
 
-        // Act
+
         int result = maxFlowService.edmondsKarp(cap);
 
-        // Assert
+
         assertTrue(result > 0, "Max flow should be positive");
         assertTrue(result <= 30, "Max flow cannot exceed total capacity from source");
     }
@@ -82,10 +82,10 @@ class MaxFlowServiceTest {
         cap[0][1] = 10; // A->B
         cap[2][3] = 10; // C->D (disconnected from A)
 
-        // Act
+
         int result = maxFlowService.edmondsKarp(cap);
 
-        // Assert
+
         assertEquals(0, result, "Max flow should be 0 when no path exists");
     }
 
@@ -98,49 +98,49 @@ class MaxFlowServiceTest {
         cap[1][2] = 1;   // B->C (bottleneck)
         cap[2][8] = 100; // C->T
 
-        // Act
+
         int result = maxFlowService.edmondsKarp(cap);
 
-        // Assert
+
         assertEquals(1, result, "Max flow should equal the bottleneck capacity");
     }
 
     @Test
     @DisplayName("Test Dinic with simple linear flow")
     void testDinic_SimpleLinearFlow() {
-        // Arrange
+
         int[][] cap = createEmptyCapacityMatrix();
         cap[0][1] = 10; // A->B
         cap[1][8] = 5;  // B->T
 
-        // Act
+
         int result = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertEquals(5, result, "Max flow should be limited by bottleneck (5)");
     }
 
     @Test
     @DisplayName("Test Dinic with multiple paths")
     void testDinic_MultiplePaths() {
-        // Arrange
+
         int[][] cap = createEmptyCapacityMatrix();
         cap[0][1] = 10; // A->B
         cap[1][8] = 8;  // B->T
         cap[0][2] = 10; // A->C
         cap[2][8] = 7;  // C->T
 
-        // Act
+
         int result = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertEquals(15, result, "Max flow should be sum of both paths (8+7)");
     }
 
     @Test
     @DisplayName("Test Dinic with complex network")
     void testDinic_ComplexNetwork() {
-        // Arrange
+
         int[][] cap = createEmptyCapacityMatrix();
         cap[0][1] = 10; // A->B
         cap[0][2] = 10; // A->C
@@ -156,10 +156,10 @@ class MaxFlowServiceTest {
         cap[6][8] = 10; // G->T
         cap[7][8] = 10; // H->T
 
-        // Act
+
         int result = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertTrue(result > 0, "Max flow should be positive");
         assertTrue(result <= 30, "Max flow cannot exceed total capacity from source");
     }
@@ -183,11 +183,11 @@ class MaxFlowServiceTest {
         cap[6][8] = 15; // G->T
         cap[7][8] = 12; // H->T
 
-        // Act
+
         int ekResult = maxFlowService.edmondsKarp(cap);
         int dinicResult = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertEquals(ekResult, dinicResult,
                 "Both algorithms should produce the same max flow result");
     }
@@ -195,17 +195,17 @@ class MaxFlowServiceTest {
     @Test
     @DisplayName("Test with zero capacity edges")
     void testWithZeroCapacity() {
-        // Arrange
+
         int[][] cap = createEmptyCapacityMatrix();
         cap[0][1] = 10; // A->B
         cap[1][2] = 0;  // B->C (zero capacity)
         cap[2][8] = 10; // C->T
 
-        // Act
+
         int ekResult = maxFlowService.edmondsKarp(cap);
         int dinicResult = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertEquals(0, ekResult, "EK: Max flow should be 0 with zero capacity edge");
         assertEquals(0, dinicResult, "Dinic: Max flow should be 0 with zero capacity edge");
     }
@@ -229,11 +229,11 @@ class MaxFlowServiceTest {
         cap[6][8] = 15; // G->T
         cap[7][8] = 15; // H->T
 
-        // Act
+
         int ekResult = maxFlowService.edmondsKarp(cap);
         int dinicResult = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertEquals(ekResult, dinicResult);
         assertTrue(ekResult <= 45, "Max flow cannot exceed sum of source edges (3*15)");
     }
@@ -257,11 +257,11 @@ class MaxFlowServiceTest {
         cap[6][8] = 5; // G->T
         cap[7][8] = 5; // H->T
 
-        // Act
+
         int ekResult = maxFlowService.edmondsKarp(cap);
         int dinicResult = maxFlowService.dinic(cap);
 
-        // Assert
+
         assertEquals(ekResult, dinicResult);
         assertTrue(ekResult > 0 && ekResult <= 15,
                 "Max flow should be positive but limited by network structure");

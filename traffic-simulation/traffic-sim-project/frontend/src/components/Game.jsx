@@ -31,7 +31,7 @@ function Game() {
 
   
 
-   //  RETRY BUTTON (same graph, reset only inputs)
+   //  RETRY BUTTON 
   const retryGame = () => {
     setReported('');
     setName('');

@@ -47,12 +47,12 @@ class GameControllerTest {
         reset(maxFlowService, playerResultRepository);
     }
 
-    // ==================== /api/game/new Endpoint Tests ====================
+    // /api/game/new Endpoint Tests
 
     @Test
     @DisplayName("GET /new should return game with edges and matrix")
     void testNewGame_ReturnsValidResponse() throws Exception {
-        // Act & Assert
+
         MvcResult result = mockMvc.perform(get("/api/game/new"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.edges").isArray())
@@ -60,7 +60,7 @@ class GameControllerTest {
                 .andExpect(jsonPath("$.edges", hasSize(13))) // 13 edges in the graph
                 .andReturn();
 
-        // Verify structure
+
         String content = result.getResponse().getContentAsString();
         Map<String, Object> response = objectMapper.readValue(content, Map.class);
 
@@ -70,7 +70,7 @@ class GameControllerTest {
         List<Map<String, Object>> edges = (List<Map<String, Object>>) response.get("edges");
         assertEquals(13, edges.size(), "Should have 13 edges");
 
-        // Verify edge structure
+
         for (Map<String, Object> edge : edges) {
             assertTrue(edge.containsKey("from"));
             assertTrue(edge.containsKey("to"));
@@ -85,12 +85,12 @@ class GameControllerTest {
     @Test
     @DisplayName("GET /new should return 9x9 matrix")
     void testNewGame_MatrixSize() throws Exception {
-        // Act
+
         MvcResult result = mockMvc.perform(get("/api/game/new"))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // Assert
+
         String content = result.getResponse().getContentAsString();
         Map<String, Object> response = objectMapper.readValue(content, Map.class);
         List<List<Integer>> matrix = (List<List<Integer>>) response.get("matrix");
@@ -104,12 +104,12 @@ class GameControllerTest {
     @Test
     @DisplayName("GET /new should have correct node names")
     void testNewGame_CorrectNodeNames() throws Exception {
-        // Act
+
         MvcResult result = mockMvc.perform(get("/api/game/new"))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // Assert
+
         String content = result.getResponse().getContentAsString();
         Map<String, Object> response = objectMapper.readValue(content, Map.class);
         List<Map<String, Object>> edges = (List<Map<String, Object>>) response.get("edges");
@@ -130,7 +130,7 @@ class GameControllerTest {
     @Test
     @DisplayName("GET /new should generate different capacities on multiple calls")
     void testNewGame_RandomCapacities() throws Exception {
-        // Act - Make two calls
+
         MvcResult result1 = mockMvc.perform(get("/api/game/new"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -139,7 +139,7 @@ class GameControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // Assert - Check that at least some capacities are different
+
         String content1 = result1.getResponse().getContentAsString();
         String content2 = result2.getResponse().getContentAsString();
 
@@ -147,7 +147,7 @@ class GameControllerTest {
                 "Two consecutive calls should likely produce different capacities");
     }
 
-    // ==================== /api/game/solve Endpoint Tests ====================
+    //  /api/game/solve Endpoint Tests
 
     @Test
     @DisplayName("POST /solve should return correct flow when player is correct")
@@ -163,7 +163,7 @@ class GameControllerTest {
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(10);
         when(playerResultRepository.save(any(PlayerResult.class))).thenReturn(new PlayerResult());
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -192,7 +192,7 @@ class GameControllerTest {
         when(maxFlowService.edmondsKarp(any(int[][].class))).thenReturn(10);
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(10);
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -219,7 +219,7 @@ class GameControllerTest {
         when(maxFlowService.edmondsKarp(any(int[][].class))).thenReturn(10);
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(10);
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -238,12 +238,12 @@ class GameControllerTest {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("matrix", matrix);
         requestBody.put("reported", 10);
-        // name is not included (null)
+
 
         when(maxFlowService.edmondsKarp(any(int[][].class))).thenReturn(10);
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(10);
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -261,12 +261,12 @@ class GameControllerTest {
         List<List<Integer>> matrix = createTestMatrix();
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("matrix", matrix);
-        // reported is missing, should default to 0
+
 
         when(maxFlowService.edmondsKarp(any(int[][].class))).thenReturn(10);
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(10);
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -278,7 +278,7 @@ class GameControllerTest {
     @Test
     @DisplayName("POST /solve should handle zero flow correctly")
     void testSolve_ZeroFlow() throws Exception {
-        // Arrange
+
         List<List<Integer>> matrix = createTestMatrix();
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("matrix", matrix);
@@ -289,7 +289,7 @@ class GameControllerTest {
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(0);
         when(playerResultRepository.save(any(PlayerResult.class))).thenReturn(new PlayerResult());
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -306,7 +306,7 @@ class GameControllerTest {
     @Test
     @DisplayName("POST /solve should verify both algorithms are called")
     void testSolve_BothAlgorithmsCalled() throws Exception {
-        // Arrange
+
         List<List<Integer>> matrix = createTestMatrix();
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("matrix", matrix);
@@ -315,13 +315,13 @@ class GameControllerTest {
         when(maxFlowService.edmondsKarp(any(int[][].class))).thenReturn(15);
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(15);
 
-        // Act
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk());
 
-        // Assert - Verify both algorithms were called
+
         verify(maxFlowService, times(1)).edmondsKarp(any(int[][].class));
         verify(maxFlowService, times(1)).dinic(any(int[][].class));
     }
@@ -334,12 +334,12 @@ class GameControllerTest {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("matrix", matrix);
         requestBody.put("reported", 10);
-        requestBody.put("name", "   ");  // Only whitespace
+        requestBody.put("name", "   ");
 
         when(maxFlowService.edmondsKarp(any(int[][].class))).thenReturn(10);
         when(maxFlowService.dinic(any(int[][].class))).thenReturn(10);
 
-        // Act & Assert
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
@@ -373,13 +373,13 @@ class GameControllerTest {
             return pr;
         });
 
-        // Act
+
         mockMvc.perform(post("/api/game/solve")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk());
 
-        // Assert
+
         verify(playerResultRepository, times(1)).save(any(PlayerResult.class));
     }
 

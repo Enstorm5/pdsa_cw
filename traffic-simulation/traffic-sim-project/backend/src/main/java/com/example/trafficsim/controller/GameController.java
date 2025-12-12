@@ -64,7 +64,7 @@ public class GameController {
     }
 
 
-    // Solve request: client provides matrix and player's reported value and name (optional)
+    // Solve request: client provides matrix and player's reported value and name
     @PostMapping("/solve")
     public Map<String,Object> solve(@RequestBody Map<String,Object> body){
         // validating inputs

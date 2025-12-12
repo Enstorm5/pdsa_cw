@@ -19,7 +19,7 @@ public class MaxFlowService {
         }
     }
 
-    // Build adjacency list from capacity matrix
+    // Builds adjacency list from capacity matrix
     private List<Edge>[] buildGraph(int[][] cap){
         List<Edge>[] g = new ArrayList[N];
         for(int i=0;i<N;i++) g[i]= new ArrayList<>();
