@@ -1,9 +1,9 @@
 ### Test 1: Health Check
 GET http://localhost:8084/api/tower/health
 
-###
 
-### Test 2: Start New Game - 3 Pegs
+
+//Test 2: Start New Game - 3 Pegs
 POST http://localhost:8084/api/tower/start
 Content-Type: application/json
 
@@ -11,9 +11,9 @@ Content-Type: application/json
   "numberOfPegs": 3
 }
 
-###
 
-### Test 3: Start New Game - 4 Pegs
+
+//Test 3: Start New Game - 4 Pegs
 POST http://localhost:8084/api/tower/start
 Content-Type: application/json
 
@@ -21,9 +21,9 @@ Content-Type: application/json
   "numberOfPegs": 4
 }
 
-###
 
-### Test 4: Submit Answer (Change gameRoundId to match your game)
+
+//Test 4: Submit Answer (Change gameRoundId to match your game)
 POST http://localhost:8084/api/tower/submit-answer
 Content-Type: application/json
 
@@ -34,19 +34,19 @@ Content-Type: application/json
   "playerMoveSequence": "A->C, A->B, C->B, A->D, A->C, D->C, A->D, C->A, C->D, A->D, B->A, B->D, A->D"
 }
 
-###
 
-### Test 5: Get All Performance Stats
+
+//Test 5: Get All Performance Stats
 GET http://localhost:8084/api/tower/performance/stats
 
-###
 
-### Test 6: Get Stats for Specific Algorithm
+
+//Test 6: Get Stats for Specific Algorithm
 GET http://localhost:8084/api/tower/performance/stats/3-Peg Recursive
 
-###
 
-### Test 7: Test Validation Error - Invalid Pegs (Should fail)
+
+//Test 7: Test Validation Error 
 POST http://localhost:8084/api/tower/start
 Content-Type: application/json
 
@@ -54,9 +54,9 @@ Content-Type: application/json
   "numberOfPegs": 5
 }
 
-###
 
-### Test 8: Test Validation Error - Missing Player Name (Should fail)
+
+//Test 8: Test Validation Error 
 POST http://localhost:8084/api/tower/submit-answer
 Content-Type: application/json
 
@@ -67,4 +67,3 @@ Content-Type: application/json
   "playerMoveSequence": "A->D"
 }
 
-###

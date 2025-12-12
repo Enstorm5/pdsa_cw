@@ -16,9 +16,7 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
     
-    /**
-     * Handle validation errors (e.g., invalid numberOfPegs)
-     */
+    //validation error handling
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
@@ -44,9 +42,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
     
-    /**
-     * Handle runtime exceptions (e.g., game round not found)
-     */
+    
+    //runtime exception handling
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         
@@ -62,9 +59,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
     
-    /**
-     * Handle all other exceptions
-     */
+    //general exception handling
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
         
@@ -80,9 +75,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
     
-    /**
-     * Error response structure
-     */
+    //Error response structure
     @lombok.Data
     @lombok.Builder
     public static class ErrorResponse {

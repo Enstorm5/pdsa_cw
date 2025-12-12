@@ -101,7 +101,7 @@ class TowerOfHanoiServiceImplTest {
     @Test
     @DisplayName("Test start new game with 4 pegs")
     void testStartNewGameWithFourPegs() {
-        // Arrange
+        
         GameStartRequest request = new GameStartRequest();
         request.setNumberOfPegs(4);
         
@@ -114,17 +114,17 @@ class TowerOfHanoiServiceImplTest {
         when(algorithmPerformanceRepository.save(any(AlgorithmPerformance.class)))
             .thenReturn(new AlgorithmPerformance());
         
-        // Act
+        
         GameStartResponse response = service.startNewGame(request);
         
-        // Assert
+        
         assertNotNull(response);
         assertEquals(2L, response.getGameRoundId());
         assertEquals(4, response.getNumberOfPegs());
         assertNotNull(response.getAlgorithm1Result());
         assertNotNull(response.getAlgorithm2Result());
         
-        // Verify 4-peg algorithms used fewer moves than 3-peg would
+        // Verify 4-peg algorithms used fewer moves than 3-peg would have
         assertTrue(response.getAlgorithm1Result().getMinimumMoves() < Math.pow(2, response.getNumberOfDisks()) - 1,
             "4-peg should be more efficient than 3-peg");
     }

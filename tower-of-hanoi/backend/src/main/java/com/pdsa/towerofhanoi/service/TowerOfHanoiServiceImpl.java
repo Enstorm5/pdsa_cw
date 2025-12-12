@@ -48,14 +48,12 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
         // Step 2: Execute appropriate algorithms based on number of pegs
         List<AlgorithmExecutionResult> results;
         if (request.getNumberOfPegs() == 3) {
-            // ========== DEBUG LOGGING ==========
+            
             System.out.println("Executing 3-peg algorithms for " + numberOfDisks + " disks");
-            // ===================================
             results = executeThreePegAlgorithms(numberOfDisks);
         } else {
-            // ========== DEBUG LOGGING ==========
+            
             System.out.println("Executing 4-peg algorithms for " + numberOfDisks + " disks");
-            // ===================================
             results = executeFourPegAlgorithms(numberOfDisks);
         }
         
@@ -197,9 +195,7 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
         return results;
     }
     
-    /**
-     * Execute a single algorithm and measure time
-     */
+    //Execute an algorithm and measure time
     private AlgorithmExecutionResult executeAlgorithm(
             AlgorithmExecutor executor, 
             int minimumMoves, 
@@ -324,9 +320,7 @@ public class TowerOfHanoiServiceImpl implements TowerOfHanoiService {
             .build();
     }
     
-    /**
-     * Validate move sequence format
-     */
+    //move sequence validation
     private boolean validateMoveSequence(String sequence, int expectedMoves) {
         if (sequence == null || sequence.trim().isEmpty()) {
             return false;

@@ -12,9 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GameStartRequest {
     
-    // Backend will randomly select numberOfDisks (5-10)
-    // User only selects numberOfPegs
-    
     @NotNull(message = "Number of pegs is required")
     @Min(value = 3, message = "Number of pegs must be 3 or 4")
     @Max(value = 4, message = "Number of pegs must be 3 or 4")

@@ -20,11 +20,7 @@ public class TowerOfHanoiController {
     
     private final TowerOfHanoiService towerOfHanoiService;
     
-    /**
-     * Start a new game round
-     * POST /api/tower/start
-     * Body: { "numberOfPegs": 3 }
-     */
+    
     @PostMapping("/start")
     public ResponseEntity<GameStartResponse> startGame(
             @Valid @RequestBody GameStartRequest request) {
@@ -36,16 +32,7 @@ public class TowerOfHanoiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
-    /**
-     * Submit player's answer
-     * POST /api/tower/submit-answer
-     * Body: {
-     *   "gameRoundId": 1,
-     *   "playerName": "John",
-     *   "playerMinimumMoves": 31,
-     *   "playerMoveSequence": "A->C, A->B, ..."
-     * }
-     */
+    
     @PostMapping("/submit-answer")
     public ResponseEntity<PlayerAnswerResponse> submitAnswer(
             @Valid @RequestBody PlayerAnswerRequest request) {
@@ -58,12 +45,7 @@ public class TowerOfHanoiController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get performance statistics for all algorithms
-     * GET /api/tower/performance/stats
-     * 
-     * Used for generating charts in individual report
-     */
+    
     @GetMapping("/performance/stats")
     public ResponseEntity<List<PerformanceStatsResponse>> getPerformanceStats() {
         
@@ -74,12 +56,7 @@ public class TowerOfHanoiController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Get performance statistics for specific algorithm
-     * GET /api/tower/performance/stats/{algorithmName}
-     * 
-     * Example: /api/tower/performance/stats/3-Peg Recursive
-     */
+    
     @GetMapping("/performance/stats/{algorithmName}")
     public ResponseEntity<PerformanceStatsResponse> getPerformanceStatsByAlgorithm(
             @PathVariable String algorithmName) {
@@ -92,10 +69,7 @@ public class TowerOfHanoiController {
         return ResponseEntity.ok(response);
     }
     
-    /**
-     * Health check endpoint
-     * GET /api/tower/health
-     */
+    
     @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("Tower of Hanoi service is running!");

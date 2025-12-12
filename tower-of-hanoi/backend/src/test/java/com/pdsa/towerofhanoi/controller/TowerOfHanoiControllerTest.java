@@ -147,7 +147,7 @@ class TowerOfHanoiControllerTest {
         
         when(service.submitAnswer(any(PlayerAnswerRequest.class))).thenReturn(response);
         
-        // Act & Assert
+        
         mockMvc.perform(post("/api/tower/submit-answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))

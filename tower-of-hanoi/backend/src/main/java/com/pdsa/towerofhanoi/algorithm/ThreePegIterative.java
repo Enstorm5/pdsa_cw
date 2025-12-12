@@ -8,22 +8,12 @@ import java.util.Stack;
 @Component
 public class ThreePegIterative {
     
-    /**
-     * Solves Tower of Hanoi using iterative approach (3 pegs)
-     * Moves from A to C using B as auxiliary
-     * Time Complexity: O(2^n)
-     * Space Complexity: O(n)
-     * 
-     * @param n Number of disks
-     * @return List of moves in format "A->C"
-     */
     public List<String> solve(int n) {
-        List<String> moves = new ArrayList<>();  // ✅ Already thread-safe
-        
-        // Calculate total number of moves
+        List<String> moves = new ArrayList<>();  
+        // total number of moves
         int totalMoves = (int) Math.pow(2, n) - 1;
         
-        // Peg naming (3 pegs only: A, B, C)
+        // Peg naming 
         char source = 'A';
         char destination = 'C';
         char auxiliary = 'B';
@@ -35,7 +25,7 @@ public class ThreePegIterative {
             auxiliary = temp;
         }
         
-        // Create stacks for each peg (3 pegs only)
+        // Create stacks for each peg 
         Stack<Integer> pegA = new Stack<>();
         Stack<Integer> pegB = new Stack<>();
         Stack<Integer> pegC = new Stack<>();
@@ -45,7 +35,7 @@ public class ThreePegIterative {
             pegA.push(i);
         }
         
-        // Perform moves
+        
         for (int i = 1; i <= totalMoves; i++) {
             if (i % 3 == 1) {
                 // Move between source and destination
@@ -62,9 +52,7 @@ public class ThreePegIterative {
         return moves;
     }
     
-    /**
-     * Helper method to move disk between two pegs
-     */
+    //A method to move disk between two pegs
     private void moveDisk(Stack<Integer> fromPeg, Stack<Integer> toPeg, 
                          char fromName, char toName, List<String> moves) {
         if (fromPeg.isEmpty() && toPeg.isEmpty()) {
@@ -86,10 +74,8 @@ public class ThreePegIterative {
         }
     }
     
-    /**
-     * Calculate minimum number of moves for n disks
-     * Formula: 2^n - 1
-     */
+    
+    //minimum number of moves calculation (2^n - 1)
     public int getMinimumMoves(int n) {
         return (int) Math.pow(2, n) - 1;
     }
