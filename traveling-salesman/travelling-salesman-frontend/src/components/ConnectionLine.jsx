@@ -1,5 +1,6 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { Html } from '@react-three/drei';
+import { Html, Line } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 export default function ConnectionLine({ id, start, end, distance, isHovered, setHovered }) {
@@ -34,6 +35,33 @@ export default function ConnectionLine({ id, start, end, distance, isHovered, se
     const color = isHovered ? "#00ffff" : "rgba(255, 255, 255, 0.1)";
     const opacity = isHovered ? 1 : 0.2;
 
+    const lineRef = useRef();
+
+    useFrame((state, delta) => {
+        if (lineRef.current) {
+            const targetWidth = isHovered ? 5 : 1;
+            const targetOpacity = isHovered ? 1 : 0.2;
+            const targetColor = new THREE.Color(isHovered ? "#ffffff" : "#ffffff");
+
+            // Smoothly interpolate line width
+            lineRef.current.material.linewidth = THREE.MathUtils.lerp(
+                lineRef.current.material.linewidth,
+                targetWidth,
+                delta * 10
+            );
+
+            // Smoothly interpolate opacity
+            lineRef.current.material.opacity = THREE.MathUtils.lerp(
+                lineRef.current.material.opacity,
+                targetOpacity,
+                delta * 10
+            );
+
+            // Optional: Smoothly interpolate color
+            // lineRef.current.material.color.lerp(targetColor, delta * 10);
+        }
+    });
+
     return (
         <group>
             {/* 
@@ -51,17 +79,20 @@ export default function ConnectionLine({ id, start, end, distance, isHovered, se
                 <cylinderGeometry args={[0.2, 0.2, new THREE.Vector3(...start).distanceTo(new THREE.Vector3(...end)), 8]} />
             </mesh>
 
-            <line>
-                <bufferGeometry>
-                    <bufferAttribute
-                        attach="attributes-position"
-                        count={2}
-                        array={new Float32Array([...start, ...end])}
-                        itemSize={3}
-                    />
-                </bufferGeometry>
-                <lineBasicMaterial color={color} transparent opacity={opacity} linewidth={isHovered ? 3 : 1} />
-            </line>
+            {/* 
+                Using Drei's Line component which supports thickness (fat lines).
+                "White neon" style: Bright white, toneMapped=false for maximum brightness (if bloom is added later),
+                and increased thickness.
+            */}
+            <Line
+                ref={lineRef}
+                points={[start, end]}       // Array of points
+                color="#ffffff"
+                transparent
+                // Initial values
+                opacity={0.2}
+                lineWidth={1}
+            />
 
             <Html position={midPoint} zIndexRange={[100, 0]} style={{ pointerEvents: 'none' }}>
                 {/* 
