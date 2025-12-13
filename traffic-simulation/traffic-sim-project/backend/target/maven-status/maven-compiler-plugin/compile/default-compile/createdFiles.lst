@@ -1,0 +1,6 @@
+com\example\trafficsim\TrafficSimApplication.class
+com\example\trafficsim\controller\GameController.class
+com\example\trafficsim\repository\PlayerResultRepository.class
+com\example\trafficsim\service\MaxFlowService.class
+com\example\trafficsim\model\PlayerResult.class
+com\example\trafficsim\service\MaxFlowService$Edge.class
