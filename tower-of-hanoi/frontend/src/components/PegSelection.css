@@ -1,0 +1,230 @@
+.peg-selection-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 1rem;
+}
+
+.pegselect-card {
+  background: #FFFFFF;
+  padding: 2.5rem 2rem;
+  border-radius: 25px;
+  box-shadow: 0 10px 40px rgba(139, 115, 85, 0.1);
+  max-width: 700px;
+  width: 100%;
+  border: 3px solid #F4D9A0;
+}
+
+.pegselect-title {
+  font-size: 1.8rem;
+  color: #8B7355;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.pegselect-subtitle {
+  font-size: 1rem;
+  color: #A0826D;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.peg-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.peg-option {
+  background: #FFF9F0;
+  padding: 2rem 1.5rem;
+  border-radius: 20px;
+  border: 3px solid #F4D9A0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 240px;
+}
+
+.peg-option:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+.peg-option.selected {
+  background: linear-gradient(135deg, #D4AF37 0%, #F4D9A0 100%);
+  border-color: #D4AF37;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+.peg-visual {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.6rem;
+  height: 90px;
+  margin-bottom: 1.5rem;
+}
+
+.visual-peg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.visual-rod {
+  width: 8px;
+  height: 70px;
+  background: linear-gradient(180deg, #D4AF37 0%, #8B7355 100%);
+  border-radius: 4px;
+  margin-bottom: 3px;
+}
+
+.visual-base {
+  width: 32px;
+  height: 10px;
+  background: #8B7355;
+  border-radius: 5px;
+}
+
+.peg-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.peg-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #8B7355;
+  line-height: 1;
+}
+
+.peg-option.selected .peg-number {
+  color: #FFFFFF;
+}
+
+.peg-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #A0826D;
+}
+
+.peg-option.selected .peg-label {
+  color: #FFFFFF;
+}
+
+.peg-difficulty {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #D4AF37;
+  background: #FFFFFF;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  margin-top: 0.5rem;
+}
+
+.peg-option.selected .peg-difficulty {
+  background: #8B7355;
+  color: #FFFFFF;
+}
+
+.pegselect-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.back-button, .confirm-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.back-button {
+  background: #FFF9F0;
+  color: #8B7355;
+  border: 2px solid #F4D9A0;
+}
+
+.back-button:hover {
+  background: #F4D9A0;
+  transform: translateY(-2px);
+}
+
+.confirm-button {
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+}
+
+.confirm-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5);
+}
+
+.confirm-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .pegselect-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .pegselect-title {
+    font-size: 1.5rem;
+  }
+  
+  .peg-options {
+    gap: 1rem;
+  }
+  
+  .peg-option {
+    padding: 1.5rem 1rem;
+    min-height: 220px;
+  }
+  
+  .peg-visual {
+    height: 80px;
+  }
+  
+  .visual-rod {
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pegselect-card {
+    padding: 1.5rem 1rem;
+  }
+  
+  .peg-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .pegselect-buttons {
+    flex-direction: column;
+  }
+}

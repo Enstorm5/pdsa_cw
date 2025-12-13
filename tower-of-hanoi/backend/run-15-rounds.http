@@ -1,0 +1,154 @@
+### Round 1 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 2 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 3 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Round 4 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 5 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Round 6 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 7 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Round 8 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 9 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Round 10 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 11 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Round 12 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 13 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Round 14 - 3 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 3
+}
+
+###
+
+### Round 15 - 4 Pegs
+POST http://localhost:8084/api/tower/start
+Content-Type: application/json
+
+{
+  "numberOfPegs": 4
+}
+
+###
+
+### Check Performance Stats After All Rounds
+GET http://localhost:8084/api/tower/performance/stats
+
+###
