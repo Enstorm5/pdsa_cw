@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
+import { startGame, selectCities, submitSolution } from './api/gameApi';
 import Interface from './components/Interface';
 import Experience from './components/Experience';
 import CitySelectionPanel from './components/CitySelectionPanel';
@@ -8,6 +9,10 @@ function App() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameData, setGameData] = useState(null);
   const [selectedCities, setSelectedCities] = useState([]);
+  const [gamePhase, setGamePhase] = useState('SELECTION'); // 'SELECTION', 'ROUTING', 'RESULTS'
+  const [startTime, setStartTime] = useState(null);
+  const [solutionResult, setSolutionResult] = useState(null);
+  const [activeGameCities, setActiveGameCities] = useState([]); // Subset of cities for the routing phase
 
   const handleGameStart = (data) => {
     setGameData(data);
@@ -24,8 +29,64 @@ function App() {
     });
   };
 
+
   const handleReset = () => {
     setSelectedCities([]);
+  };
+
+  const handleConfirmCities = async () => {
+    if (selectedCities.length === 0) return;
+    try {
+      // 1. Send selected cities to backend
+      await selectCities(gameData.sessionId, selectedCities);
+
+      // 2. Lock in these cities for the routing phase
+      setActiveGameCities([...selectedCities]);
+
+      // 3. Reset selection so user can build the path
+      setSelectedCities([]);
+
+      // 4. Start Timer and switch phase
+      setStartTime(Date.now());
+      setGamePhase('ROUTING');
+
+    } catch (error) {
+      console.error('Failed to confirm cities:', error);
+      alert('Failed to start routing phase.');
+    }
+  };
+
+  const handleSubmitSolution = async () => {
+    if (selectedCities.length === 0) return;
+
+    // Calculate time taken
+    // Calculate time taken
+    const endTime = Date.now();
+    const timeTaken = endTime - startTime;
+
+    // Auto-append home city if not already at the end
+    let finalPath = [...selectedCities];
+    if (finalPath[finalPath.length - 1] !== gameData.homeCity) {
+      finalPath.push(gameData.homeCity);
+    }
+
+    try {
+      const result = await submitSolution(gameData.sessionId, finalPath, timeTaken);
+      setSolutionResult(result);
+      setGamePhase('RESULTS');
+    } catch (error) {
+      console.error('Failed to submit solution:', error);
+      alert('Failed to submit solution.');
+    }
+  };
+
+  const handleRestart = () => {
+    setGamePhase('SELECTION');
+    setSelectedCities([]);
+    setSolutionResult(null);
+    setActiveGameCities([]);
+    setStartTime(null);
+    // Might need to re-fetch initial game data or just reset state
   };
 
   return (
@@ -47,11 +108,16 @@ function App() {
 
       {gameStarted && gameData && (
         <CitySelectionPanel
-          cities={gameData.cityLabels}
+          cities={gamePhase === 'ROUTING' ? activeGameCities : gameData.cityLabels}
           selectedCities={selectedCities}
           onToggleCity={handleToggleCity}
           gameData={gameData}
           onReset={handleReset}
+          onConfirm={handleConfirmCities}
+          onSubmit={handleSubmitSolution}
+          onRestart={handleRestart}
+          gamePhase={gamePhase}
+          solutionResult={solutionResult}
         />
       )}
     </>
