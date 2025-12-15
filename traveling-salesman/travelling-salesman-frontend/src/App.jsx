@@ -20,13 +20,19 @@ function App() {
   };
 
   const handleToggleCity = (city) => {
-    setSelectedCities(prev => {
-      if (prev.includes(city)) {
-        return prev.filter(c => c !== city);
-      } else {
-        return [...prev, city];
-      }
-    });
+    if (gamePhase === 'ROUTING') {
+      // In Routing phase, we just build the path path sequence
+      setSelectedCities(prev => [...prev, city]);
+    } else {
+      // In Selection phase, we toggle inclusion
+      setSelectedCities(prev => {
+        if (prev.includes(city)) {
+          return prev.filter(c => c !== city);
+        } else {
+          return [...prev, city];
+        }
+      });
+    }
   };
 
 
@@ -41,7 +47,12 @@ function App() {
       await selectCities(gameData.sessionId, selectedCities);
 
       // 2. Lock in these cities for the routing phase
-      setActiveGameCities([...selectedCities]);
+      // Ensure home city is included in the available set if not already selected
+      const routingCities = [...selectedCities];
+      if (!routingCities.includes(gameData.homeCity)) {
+        routingCities.push(gameData.homeCity);
+      }
+      setActiveGameCities(routingCities);
 
       // 3. Reset selection so user can build the path
       setSelectedCities([]);
@@ -64,14 +75,8 @@ function App() {
     const endTime = Date.now();
     const timeTaken = endTime - startTime;
 
-    // Auto-append home city if not already at the end
-    let finalPath = [...selectedCities];
-    if (finalPath[finalPath.length - 1] !== gameData.homeCity) {
-      finalPath.push(gameData.homeCity);
-    }
-
     try {
-      const result = await submitSolution(gameData.sessionId, finalPath, timeTaken);
+      const result = await submitSolution(gameData.sessionId, selectedCities, timeTaken);
       setSolutionResult(result);
       setGamePhase('RESULTS');
     } catch (error) {
