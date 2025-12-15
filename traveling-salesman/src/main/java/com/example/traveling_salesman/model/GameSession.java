@@ -36,6 +36,10 @@ public class GameSession {
 	@Column(name = "distance_matrix", nullable = false, columnDefinition = "LONGTEXT")
 	private String distanceMatrixJson;
 
+	@Lob
+	@Column(name = "selected_cities", columnDefinition = "LONGTEXT")
+	private String selectedCitiesJson;
+
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private Instant createdAt;
 
@@ -78,6 +82,14 @@ public class GameSession {
 
 	public void setDistanceMatrixJson(String distanceMatrixJson) {
 		this.distanceMatrixJson = distanceMatrixJson;
+	}
+
+	public String getSelectedCitiesJson() {
+		return selectedCitiesJson;
+	}
+
+	public void setSelectedCitiesJson(String selectedCitiesJson) {
+		this.selectedCitiesJson = selectedCitiesJson;
 	}
 
 	public Instant getCreatedAt() {

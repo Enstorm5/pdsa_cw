@@ -77,6 +77,18 @@ function App() {
 
     try {
       const result = await submitSolution(gameData.sessionId, selectedCities, timeTaken);
+
+      // Ensure optimal path loop is closed for display
+      if (result && result.optimalPath && result.optimalPath.length > 0) {
+        const firstCity = result.optimalPath[0];
+        const lastCity = result.optimalPath[result.optimalPath.length - 1];
+        if (firstCity !== lastCity) {
+          // It seems the backend doesn't close the loop in the list
+          // We'll append the first city (Home City) to the end
+          result.optimalPath = [...result.optimalPath, firstCity];
+        }
+      }
+
       setSolutionResult(result);
       setGamePhase('RESULTS');
     } catch (error) {
@@ -85,13 +97,21 @@ function App() {
     }
   };
 
-  const handleRestart = () => {
-    setGamePhase('SELECTION');
-    setSelectedCities([]);
-    setSolutionResult(null);
-    setActiveGameCities([]);
-    setStartTime(null);
-    // Might need to re-fetch initial game data or just reset state
+  const handleRestart = async () => {
+    try {
+      if (gameData?.playerName) {
+        const data = await startGame(gameData.playerName);
+        setGameData(data);
+      }
+      setGamePhase('SELECTION');
+      setSelectedCities([]);
+      setSolutionResult(null);
+      setActiveGameCities([]);
+      setStartTime(null);
+    } catch (error) {
+      console.error('Failed to restart game:', error);
+      alert('Failed to start a new game session.');
+    }
   };
 
   const handleRetry = () => {
@@ -121,7 +141,10 @@ function App() {
 
       {gameStarted && gameData && (
         <CitySelectionPanel
-          cities={gamePhase === 'ROUTING' ? activeGameCities : gameData.cityLabels}
+          cities={gamePhase === 'ROUTING'
+            ? activeGameCities
+            : gameData.cityLabels.filter(city => city !== gameData.homeCity)
+          }
           selectedCities={selectedCities}
           onToggleCity={handleToggleCity}
           gameData={gameData}

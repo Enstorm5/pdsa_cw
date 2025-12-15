@@ -91,6 +91,7 @@ public class GameService {
 		City homeCity = session.getHomeCity();
 		List<City> visitCities = toCityList(request.getCities());
 		visitCities.removeIf(city -> city == homeCity);
+		session.setSelectedCitiesJson(writeJson(toCityStrings(visitCities)));
 
 		List<AlgorithmResultDto> algorithmResults = new ArrayList<>();
 		for (TspAlgorithm algorithm : algorithms) {
@@ -134,9 +135,19 @@ public class GameService {
 			throw new IllegalArgumentException("Submitted path must include at least the home city");
 		}
 
-		int submittedDistance = calculateDistance(submittedPath, matrix);
+		List<City> submittedVisitCities = deriveVisitCities(submittedPath, homeCity);
+		List<City> selectedFromSession = readSelectedCities(session);
+		List<City> visitCities = selectedFromSession.isEmpty() ? submittedVisitCities : selectedFromSession;
 
-		List<City> visitCities = deriveVisitCities(submittedPath, homeCity);
+		if (!selectedFromSession.isEmpty()) {
+			var submittedSet = new LinkedHashSet<>(submittedVisitCities);
+			if (!submittedSet.containsAll(selectedFromSession)) {
+				throw new IllegalArgumentException("Submitted path must include all selected cities: "
+						+ String.join(", ", toCityStrings(selectedFromSession)));
+			}
+		}
+
+		int submittedDistance = calculateDistance(submittedPath, matrix);
 		TspSolution optimalSolution = resolveBestSolution(homeCity, visitCities, matrix);
 
 		boolean correct = submittedDistance == optimalSolution.getTotalDistance();
@@ -188,6 +199,19 @@ public class GameService {
 			return new DistanceMatrix(values);
 		} catch (JsonProcessingException ex) {
 			throw new IllegalStateException("Unable to read stored distance matrix", ex);
+		}
+	}
+
+	private List<City> readSelectedCities(GameSession session) {
+		String json = session.getSelectedCitiesJson();
+		if (json == null || json.isBlank()) {
+			return List.of();
+		}
+		try {
+			String[] names = objectMapper.readValue(json, String[].class);
+			return toCityList(Arrays.asList(names));
+		} catch (JsonProcessingException ex) {
+			throw new IllegalStateException("Unable to read stored selected cities", ex);
 		}
 	}
 
