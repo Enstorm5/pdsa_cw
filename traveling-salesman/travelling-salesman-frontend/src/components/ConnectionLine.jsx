@@ -3,7 +3,7 @@ import { Html, Line } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-export default function ConnectionLine({ id, start, end, distance, isHovered, setHovered }) {
+export default function ConnectionLine({ id, start, end, distance, isHovered, setHovered, isActive }) {
     const ref = useRef();
 
     useLayoutEffect(() => {
@@ -32,16 +32,19 @@ export default function ConnectionLine({ id, start, end, distance, isHovered, se
     // Native Line in ThreeJS has fixed width 1px on most browsers (limitation of WebGL implementation in some browsers).
     // For better visibility, we can color it bright neon when hovered.
 
-    const color = isHovered ? "#00ffff" : "rgba(255, 255, 255, 0.1)";
-    const opacity = isHovered ? 1 : 0.2;
+    const color = (isHovered || isActive) ? "#00ffff" : "rgba(255, 255, 255, 0.1)";
+    const opacity = (isHovered || isActive) ? 1 : 0.2;
 
     const lineRef = useRef();
 
     useFrame((state, delta) => {
         if (lineRef.current) {
-            const targetWidth = isHovered ? 5 : 1;
-            const targetOpacity = isHovered ? 1 : 0.2;
-            const targetColor = new THREE.Color(isHovered ? "#ffffff" : "#ffffff");
+            const targetWidth = (isHovered || isActive) ? 5 : 1;
+            const targetOpacity = (isHovered || isActive) ? 1 : 0.2;
+
+            // Color logic: White for generic hover, Cyan for active path
+            const targetColorHex = isActive ? "#00ffff" : (isHovered ? "#ffffff" : "#ffffff");
+            const targetColor = new THREE.Color(targetColorHex);
 
             // Smoothly interpolate line width
             lineRef.current.material.linewidth = THREE.MathUtils.lerp(
@@ -57,8 +60,8 @@ export default function ConnectionLine({ id, start, end, distance, isHovered, se
                 delta * 10
             );
 
-            // Optional: Smoothly interpolate color
-            // lineRef.current.material.color.lerp(targetColor, delta * 10);
+            // Smoothly interpolate color
+            lineRef.current.material.color.lerp(targetColor, delta * 10);
         }
     });
 

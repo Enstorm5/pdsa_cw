@@ -315,10 +315,19 @@ body {
 
 .info-item {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
+
+.home-city-highlight {
+  color: #ec4899 !important;
+  font-size: 1.3rem;
+  text-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+  font-weight: 800;
+}
+
 
 .info-item span {
   color: white;

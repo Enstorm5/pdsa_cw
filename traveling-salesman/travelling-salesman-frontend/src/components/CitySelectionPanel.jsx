@@ -38,7 +38,7 @@ export default function CitySelectionPanel({
             <div className="panel-info">
                 <h3 className="panel-title">Game Info</h3>
                 <div className="info-item">Player: <span>{gameData.playerName}</span></div>
-                <div className="info-item">Home City: <span>{gameData.homeCity}</span></div>
+                <div className="info-item">Home City: <span className="home-city-highlight">{gameData.homeCity}</span></div>
                 <div className="info-item">Session: <span>#{gameData.sessionId}</span></div>
                 {gamePhase === 'ROUTING' && (
                     <div className="info-item" style={{ marginTop: '10px', color: '#0ff', fontSize: '1.2rem' }}>

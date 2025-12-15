@@ -4,7 +4,7 @@ import CityNode from './CityNode';
 import ConnectionLine from './ConnectionLine';
 import * as THREE from 'three';
 
-export default function Experience({ gameData, selectedCities = [] }) {
+export default function Experience({ gameData, selectedCities = [], gamePhase }) {
     const { cityLabels, distanceMatrix } = gameData;
 
     // Calculate positions in a circle
@@ -69,17 +69,49 @@ export default function Experience({ gameData, selectedCities = [] }) {
                     );
                 })}
 
-                {connections.map((conn) => (
-                    <ConnectionLine
-                        key={conn.key}
-                        id={conn.key}
-                        start={conn.start}
-                        end={conn.end}
-                        distance={conn.distance}
-                        isHovered={hoveredConnection === conn.key}
-                        setHovered={setHoveredConnection}
-                    />
-                ))}
+
+
+                {connections.map((conn) => {
+                    // Check if this connection is part of the selected path
+                    let isActive = false;
+                    const canHighlight = gamePhase === 'ROUTING' || gamePhase === 'RESULTS';
+
+                    if (canHighlight && selectedCities && selectedCities.length > 1) {
+                        // selectedCities is an ordered array e.g. ["A", "B", "C"]
+                        // We need to check if conn.start/end matches any segment A->B, B->C
+
+                        // conn.key is `${i}-${j}` where i < j indices in cityLabels
+                        const connKey = conn.key;
+
+                        for (let k = 0; k < selectedCities.length - 1; k++) {
+                            const city1 = selectedCities[k];
+                            const city2 = selectedCities[k + 1];
+                            const idx1 = cityLabels.indexOf(city1);
+                            const idx2 = cityLabels.indexOf(city2);
+
+                            const minIdx = Math.min(idx1, idx2);
+                            const maxIdx = Math.max(idx1, idx2);
+
+                            if (`${minIdx}-${maxIdx}` === connKey) {
+                                isActive = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    return (
+                        <ConnectionLine
+                            key={conn.key}
+                            id={conn.key}
+                            start={conn.start}
+                            end={conn.end}
+                            distance={conn.distance}
+                            isHovered={hoveredConnection === conn.key}
+                            setHovered={setHoveredConnection}
+                            isActive={isActive}
+                        />
+                    );
+                })}
             </group>
 
             <gridHelper args={[30, 30, 0x222222, 0x111111]} position={[0, -2, 0]} />

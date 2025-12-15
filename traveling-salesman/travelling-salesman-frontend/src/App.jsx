@@ -102,6 +102,7 @@ function App() {
             <Experience
               gameData={gameData}
               selectedCities={selectedCities}
+              gamePhase={gamePhase}
             />
           )}
         </Canvas>
