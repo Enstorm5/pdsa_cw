@@ -1,5 +1,20 @@
 package com.example.traveling_salesman.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.traveling_salesman.dto.AlgorithmEvaluationResponse;
 import com.example.traveling_salesman.dto.AlgorithmResultDto;
 import com.example.traveling_salesman.dto.GameResponse;
@@ -19,19 +34,6 @@ import com.example.traveling_salesman.service.algorithms.TspSolution;
 import com.example.traveling_salesman.support.DistanceMatrixGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class GameService {
@@ -137,8 +139,7 @@ public class GameService {
 		List<City> visitCities = deriveVisitCities(submittedPath, homeCity);
 		TspSolution optimalSolution = resolveBestSolution(homeCity, visitCities, matrix);
 
-		boolean correct = submittedDistance == optimalSolution.getTotalDistance()
-				&& normalizePath(submittedPath).equals(normalizePath(optimalSolution.getOrderedPath()));
+		boolean correct = submittedDistance == optimalSolution.getTotalDistance();
 
 		if (correct) {
 			persistSuccessfulAttempt(session, visitCities, optimalSolution, request.getTimeTakenByUserMs());
