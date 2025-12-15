@@ -1,0 +1,8 @@
+com/pdsa/snakeandladder/model/GameRequest.class
+com/pdsa/snakeandladder/controller/GameController.class
+com/pdsa/snakeandladder/repository/GameResultRepository.class
+com/pdsa/snakeandladder/SnakeandladderApplication.class
+com/pdsa/snakeandladder/model/Board.class
+com/pdsa/snakeandladder/service/GameService.class
+com/pdsa/snakeandladder/exception/GlobalExceptionHandler.class
+com/pdsa/snakeandladder/model/GameResult.class

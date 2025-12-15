@@ -1,0 +1,8 @@
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/SnakeandladderApplication.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/controller/GameController.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/exception/GlobalExceptionHandler.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/model/Board.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/model/GameRequest.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/model/GameResult.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/repository/GameResultRepository.java
+/Users/ravinduwijethunga/Desktop/New Snake/Naya/backend/src/main/java/com/pdsa/snakeandladder/service/GameService.java
