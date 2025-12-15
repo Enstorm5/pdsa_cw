@@ -12,7 +12,7 @@ public class ThreadedQueensSolver {
     private List<List<Integer>> solutions;
     private long executionTime;
     
-    // Why CopyOnWriteArrayList? Thread-safe for concurrent writes
+    // thread-safe list for concurrent access
     public ThreadedQueensSolver() {
         this.solutions = new CopyOnWriteArrayList<>();
     }
@@ -21,7 +21,7 @@ public class ThreadedQueensSolver {
         long startTime = System.currentTimeMillis();
         ExecutorService executor = Executors.newFixedThreadPool(8);
         
-        // Split work: each thread handles one starting row
+        //each thread handles one starting row
         for (int row = 0; row < 8; row++) {
             final int startRow = row;
             executor.submit(() -> {
@@ -63,7 +63,7 @@ public class ThreadedQueensSolver {
         return true;
     }
     
-    // Getters
+    //getters
     public List<List<Integer>> getSolutions() {
         return solutions;
     }
