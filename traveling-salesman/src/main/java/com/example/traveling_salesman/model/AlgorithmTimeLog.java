@@ -25,8 +25,8 @@ public class AlgorithmTimeLog {
 	@Column(name = "algorithm_name", nullable = false, length = 50)
 	private String algorithmName;
 
-	@Column(name = "time_taken_ns", nullable = false)
-	private long timeTakenNs;
+	@Column(name = "time_taken_ms", nullable = false, precision = 15, scale = 4)
+	private java.math.BigDecimal timeTakenMs;
 
 	public Long getId() {
 		return id;
@@ -48,11 +48,11 @@ public class AlgorithmTimeLog {
 		this.algorithmName = algorithmName;
 	}
 
-	public long getTimeTakenNs() {
-		return timeTakenNs;
+	public java.math.BigDecimal getTimeTakenMs() {
+		return timeTakenMs;
 	}
 
-	public void setTimeTakenNs(long timeTakenNs) {
-		this.timeTakenNs = timeTakenNs;
+	public void setTimeTakenMs(java.math.BigDecimal timeTakenMs) {
+		this.timeTakenMs = timeTakenMs;
 	}
 }

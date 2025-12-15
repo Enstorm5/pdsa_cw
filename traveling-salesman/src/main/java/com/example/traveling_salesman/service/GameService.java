@@ -28,6 +28,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,17 +92,20 @@ public class GameService {
 
 		List<AlgorithmResultDto> algorithmResults = new ArrayList<>();
 		for (TspAlgorithm algorithm : algorithms) {
-			long start = System.nanoTime();
-			TspSolution solution = algorithm.solve(homeCity, visitCities, matrix);
-			long elapsedNs = System.nanoTime() - start;
+		    long start = System.nanoTime();
+		    TspSolution solution = algorithm.solve(homeCity, visitCities, matrix);
+		    long elapsedNs = System.nanoTime() - start;
 
-			session.addTimeLog(createTimeLog(algorithm.name(), elapsedNs));
+		    BigDecimal elapsedMs = BigDecimal.valueOf(elapsedNs)
+			    .divide(BigDecimal.valueOf(1_000_000L), 4, RoundingMode.HALF_UP);
 
-			algorithmResults.add(new AlgorithmResultDto(
-					algorithm.name(),
-					toCityStrings(solution.getOrderedPath()),
-					solution.getTotalDistance(),
-					elapsedNs));
+		    session.addTimeLog(createTimeLog(algorithm.name(), elapsedMs));
+
+		    algorithmResults.add(new AlgorithmResultDto(
+			    algorithm.name(),
+			    toCityStrings(solution.getOrderedPath()),
+			    solution.getTotalDistance(),
+			    elapsedMs));
 		}
 
 		gameSessionRepository.save(session);
@@ -162,10 +167,10 @@ public class GameService {
 		gameResultRepository.save(result);
 	}
 
-	private AlgorithmTimeLog createTimeLog(String algorithmName, long elapsedNs) {
+	private AlgorithmTimeLog createTimeLog(String algorithmName, BigDecimal elapsedMs) {
 		AlgorithmTimeLog timeLog = new AlgorithmTimeLog();
 		timeLog.setAlgorithmName(algorithmName);
-		timeLog.setTimeTakenNs(elapsedNs);
+		timeLog.setTimeTakenMs(elapsedMs);
 		return timeLog;
 	}
 

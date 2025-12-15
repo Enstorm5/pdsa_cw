@@ -1,5 +1,6 @@
 package com.example.traveling_salesman.dto;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,15 +9,15 @@ public class AlgorithmResultDto {
     private String algorithmName;
     private List<String> path = new ArrayList<>();
     private int totalDistance;
-    private long timeTakenNs;
+    private BigDecimal timeTakenMs;
 
     public AlgorithmResultDto() {}
 
-    public AlgorithmResultDto(String algorithmName, List<String> path, int totalDistance, long timeTakenNs) {
+    public AlgorithmResultDto(String algorithmName, List<String> path, int totalDistance, BigDecimal timeTakenMs) {
         this.algorithmName = algorithmName;
         this.path = new ArrayList<>(path);
         this.totalDistance = totalDistance;
-        this.timeTakenNs = timeTakenNs;
+        this.timeTakenMs = timeTakenMs;
     }
 
     public String getAlgorithmName() {
@@ -43,11 +44,11 @@ public class AlgorithmResultDto {
         this.totalDistance = totalDistance;
     }
 
-    public long getTimeTakenNs() {
-        return timeTakenNs;
+    public BigDecimal getTimeTakenMs() {
+        return timeTakenMs;
     }
 
-    public void setTimeTakenNs(long timeTakenNs) {
-        this.timeTakenNs = timeTakenNs;
+    public void setTimeTakenMs(BigDecimal timeTakenMs) {
+        this.timeTakenMs = timeTakenMs;
     }
 }
