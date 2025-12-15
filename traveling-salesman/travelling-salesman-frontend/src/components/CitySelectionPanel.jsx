@@ -79,14 +79,13 @@ export default function CitySelectionPanel({
                                 </div>
                             ) : null}
 
-                            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                                <button className="start-button" onClick={onRetry} style={{ flex: 1 }}>
+                            <div className="button-group">
+                                <button className="start-button" onClick={onRetry}>
                                     Try Again
                                 </button>
                                 <button
                                     className="reset-button"
                                     onClick={() => setShowAnswer(!showAnswer)}
-                                    style={{ flex: 1 }}
                                 >
                                     {showAnswer ? 'Hide Answer' : 'Show Answer'}
                                 </button>

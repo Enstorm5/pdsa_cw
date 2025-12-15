@@ -105,7 +105,7 @@ body {
 
 .start-button {
   background: linear-gradient(90deg, #4f46e5 0%, #ec4899 100%);
-  border: none;
+  border: 1px solid transparent;
   padding: 12px;
   border-radius: 8px;
   color: white;
