@@ -9,10 +9,18 @@ export default function CitySelectionPanel({
     onConfirm,
     onSubmit,
     onRestart,
+    onRetry,
     gamePhase,
     solutionResult
 }) {
     const [timer, setTimer] = useState(0);
+    const [showAnswer, setShowAnswer] = useState(false);
+
+    useEffect(() => {
+        if (solutionResult === null) {
+            setShowAnswer(false);
+        }
+    }, [solutionResult]);
 
     useEffect(() => {
         let interval;
@@ -61,15 +69,32 @@ export default function CitySelectionPanel({
                     </div>
 
                     {!solutionResult.correct && (
-                        <div className="optimal-path-hint">
-                            <p>Correct Path:</p>
-                            <div className="path-display">
-                                {solutionResult.optimalPath.join(' → ')}
+                        <>
+                            {showAnswer ? (
+                                <div className="optimal-path-hint">
+                                    <p>Correct Path:</p>
+                                    <div className="path-display">
+                                        {solutionResult.optimalPath.join(' → ')}
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                                <button className="start-button" onClick={onRetry} style={{ flex: 1 }}>
+                                    Try Again
+                                </button>
+                                <button
+                                    className="reset-button"
+                                    onClick={() => setShowAnswer(!showAnswer)}
+                                    style={{ flex: 1 }}
+                                >
+                                    {showAnswer ? 'Hide Answer' : 'Show Answer'}
+                                </button>
                             </div>
-                        </div>
+                        </>
                     )}
 
-                    <button className="reset-button" onClick={onRestart} style={{ marginTop: '20px' }}>
+                    <button className="reset-button" onClick={onRestart} style={{ marginTop: '20px', width: '100%' }}>
                         Play Again
                     </button>
                 </div>

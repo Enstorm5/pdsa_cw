@@ -94,6 +94,13 @@ function App() {
     // Might need to re-fetch initial game data or just reset state
   };
 
+  const handleRetry = () => {
+    setGamePhase('ROUTING');
+    setSelectedCities([]);
+    setSolutionResult(null);
+    setStartTime(Date.now());
+  };
+
   return (
     <>
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
@@ -122,6 +129,7 @@ function App() {
           onConfirm={handleConfirmCities}
           onSubmit={handleSubmitSolution}
           onRestart={handleRestart}
+          onRetry={handleRetry}
           gamePhase={gamePhase}
           solutionResult={solutionResult}
         />
