@@ -1,0 +1,73 @@
+.game-card {
+  background: radial-gradient(circle at top, #1b1b1b, #0e0e0e);
+  padding: 22px;
+  border-radius: 14px;
+  max-width: 960px;
+  margin: 30px auto;
+  color: #ffffff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.game-card h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.game-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+.answer-box {
+  margin: 14px 0;
+  text-align: center;
+}
+
+.answer-box label {
+  margin-right: 18px;
+  font-size: 15px;
+}
+
+.answer-box input {
+  margin-right: 6px;
+}
+
+button {
+  width: 100%;
+  background: linear-gradient(135deg, #ff3b3b, #c62828);
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.4);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result-box {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.win {
+  color: #4caf50;
+}
+
+.lose {
+  color: #f44336;
+}
